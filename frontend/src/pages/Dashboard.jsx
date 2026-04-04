@@ -1,10 +1,10 @@
-import React from 'react';
-import Navbar from '../components/navbar';
+import { React } from 'react';
+import Toolbar from '../components/Toolbar';
 
 const Dashboard = () => {
     return (
         <div className='min-h-screen flex flex-col items-center justify-center'>
-            <Navbar />
+            <Toolbar />
         </div>
     )
 }
