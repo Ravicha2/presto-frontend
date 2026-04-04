@@ -1,0 +1,1 @@
+- Make logo clickable and navigate to landing page (if not logged in) and dashboard (if logged in)
