@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../components/navbar';
 import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
+import Alert from '../components/Alert';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -21,6 +22,7 @@ const Login = () => {
             navigate('/dashboard');
         } catch(error) {
             console.error(error)
+            setError('Email or Password incorrect')
         } finally {
             setLoading(false)
         }
@@ -29,6 +31,9 @@ const Login = () => {
     return (
         <div className='min-h-screen flex flex-col items-center justify-center'>
             <Navbar />
+            {error && (
+                    <Alert type="error" message={error} onClose={() => setError(null)} />
+            )}
             <h1 className='text-2xl font-bold mb-4'>Login</h1>
             <form className='flex flex-col gap-4 w-full' onSubmit={handleSubmit}>
                 <input
@@ -52,7 +57,6 @@ const Login = () => {
                     >
                     {loading ? 'Logging in...' : 'Login'}    
                 </button>
-                {error && <p className='error'>{error}</p>}
             </form>
         </div>
     );
