@@ -1,19 +1,24 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-export default function Hero() {
+const Hero = () => {
     return (
         <>
             <div className="flex flex-row">
-                <main className="flex-grow">
-                    <section className="flex flex-col justify-center text-center p-20">
-                        <h2 className="font-extrabold mb-6">Make better presentations</h2>
-                        <p className="text-xl text-gray-600 mb-8 max-w-2xl">
-                            Create exceptional slide decks in half the time using intuitive design tools and machine learning. Present remotely or on-site.
-                        </p>
-                        <button className="bg-blue-600 text-white px-4 py-2 rounded">Get Started</button>
-                    </section>
-                </main>
+                <section className="flex flex-col justify-center text-center p-20">
+                    <h1 className="text-xl font-bold text-white">🪄🪄🪄Presto🪄🪄🪄</h1>
+                    <h2 className="font-extrabold mb-6 text-white">Make better presentations</h2>
+                    <p className="text-xl text-gray-600 mb-8 max-w-2xl text-white">
+                        Create exceptional slide decks in half the time using intuitive design tools and machine learning. Present remotely or on-site.
+                    </p>
+                    <div className='flex-row'>
+                        <Link to="/login" className="inline-block bg-blue-400 text-white px-6 py-2 mx-2 rounded hover:bg-blue-700 transition-colors" style={{ color: 'white' }}>Login</Link>
+                        <Link to="/register" className="inline-block bg-blue-400 text-white px-6 py-2 mx-2 rounded hover:bg-blue-700 transition-colors" style={{ color: 'white' }}>Register</Link>
+                    </div>
+                </section>
             </div>
         </>
     )
 }
+
+export default Hero

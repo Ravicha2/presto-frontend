@@ -4,12 +4,16 @@ import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 
-export default function LandingPage() {
+const LandingPage = () => {
   return (
-    <>
-    <Navbar />
-    <Hero />
-    <Footer />
-    </>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex flex-grow justify-center">
+        <Hero />
+      </main>
+      <Footer />
+    </div>
   );
 }
+
+export default LandingPage
