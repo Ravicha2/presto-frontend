@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const isLoggedIn = false; // TODO: update after auth fully done
+  const isLoggedIn = localStorage.getItem("token") ? true : false;
   return (
     <nav className="flex justify-between absolute top-0 left-0 p-4"> 
         {
