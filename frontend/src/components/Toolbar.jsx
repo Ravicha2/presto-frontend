@@ -9,7 +9,7 @@ const Toolbar = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleCreateSuccess = (newPresentation) => {
-        console.log('Created:', newPresentation);
+        window.dispatchEvent(new CustomEvent('presentationCreated', { detail: newPresentation }));
     }
 
     return (
