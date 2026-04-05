@@ -25,11 +25,12 @@ const CreateSlideModal = ({ isOpen, onClose, onSuccess}) => {
                 description: description.trim(),
                 thumbnail: thumbnail,
                 createdAt: new Date().toISOString(),
+                slides: [{}],
             };
             const presentations = store.presentations || [];
             const updateStore = {
                 ...store,
-                presentation: [...presentations, newPresentation]
+                presentations: [...presentations, newPresentation]
             }
             await api.PUT('/store', { store: updateStore });
             onSuccess(newPresentation);
