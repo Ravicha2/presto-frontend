@@ -1,1 +1,2 @@
-- Make logo clickable and navigate to landing page (if not logged in) and dashboard (if logged in)
+# To home button
+- Logo on top left will be use to go back to landing page/dashboard instead of a 'back' button

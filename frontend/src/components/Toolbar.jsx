@@ -2,11 +2,13 @@ import { React, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import LogOut from './Logout';
 import CreateSlideModal from './CreateSlideModal';
+import ConfirmPopup from './ConfirmPopup';
 
 const Toolbar = () => {
     const location = useLocation();
     const isDashboard = location.pathname === '/dashboard';
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteOpen, setIsDelteOpen] = useState(false);
 
     const handleCreateSuccess = (newPresentation) => {
         window.dispatchEvent(new CustomEvent('presentationCreated', { detail: newPresentation }));
@@ -20,23 +22,34 @@ const Toolbar = () => {
                         Presto
                     </Link>
                     {isDashboard && (
-                        <button 
-                        className='px-5 py-3 rounded-full bg-gray-500 text-white mt-10 hover:bg-gray-700'
-                        onClick={() => setIsModalOpen(true)}
-                        >
-                            +
-                        </button>
+                        <>
+                            <button 
+                            className='px-5 py-3 rounded-full bg-gray-500 text-white mt-10 hover:bg-gray-700'
+                            onClick={() => setIsModalOpen(true)}
+                            >
+                                +
+                            </button>
+                            <p>create</p>
+                        </>
                     )}
-                    <p>create</p>
                 </div>
-                <LogOut />
-                {!isDashboard && (
-                    <>
-                        <button className="p-3 rounded hover:bg-gray-700 text-white">Text</button>
-                        <button className="p-3 rounded hover:bg-gray-700 text-white">Image</button>
-                        <button className="p-3 rounded hover:bg-gray-700 text-white">Shape</button>
-                    </>
-                )}
+                <div>
+                    {!isDashboard && (
+                        <div className="flex flex-col justify-end">
+                            <button 
+                                className="p-3 rounded hover:bg-gray-700 text-white mb-3"
+                                onClick={() => setIsDelteOpen(true)}
+                            >
+                                🗑️
+                            </button>
+                            <ConfirmPopup
+                                isOpen={isDeleteOpen}
+                                onClose={() => setIsDelteOpen(false)}
+                            />
+                        </div>
+                    )}
+                    <LogOut />
+                </div>
             </aside>
             <CreateSlideModal
                   isOpen={isModalOpen}
