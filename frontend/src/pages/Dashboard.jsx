@@ -20,7 +20,7 @@ const Dashboard = () => {
         <div className='min-h-screen flex flex-col ml-20 bg-linear-to-t to-sky-500 from-gray-300'>
             <Toolbar />
             <div className="flex flex-col p-4 w-full items-center">
-                <h3 className="text-2xl font-bold mb-4 text-white">Your presentations</h3>
+                <h3 className="text-4xl font-bold my-5 text-white">Your presentations</h3>
                 <div
                     className="gap-4 flex flex-wrap"
                 >
