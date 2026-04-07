@@ -3,13 +3,6 @@ import Toolbar from '../components/Toolbar';
 import PresentationCard from '../components/PresentationCard';
 import api from '../utils/api';
 
-/**
- * List of presentations on Dashboard
- *
- * On the dashboard page, the card for each presentation should appear as rectangles with a 2:1 width:height ratio.
- * Each rectangle should include name, thumbnail (grey square if empty), description (no text if empty) and the Number of slides it contains
- * Rectangles should be evenly spaced in several rows and columns if needed, where each rectangle has a minimum of 100px width, the actual width of rectangles in different viewports should look reasonable.
- */
 const Dashboard = () => {
     const [presentation, setPresentations] = useState([]);
 
@@ -24,10 +17,10 @@ const Dashboard = () => {
         return () => window.removeEventListener('presentationCreated', handleRefresh)
     }, []);
     return (
-        <div className='min-h-screen flex flex-col ml-20'>
+        <div className='min-h-screen flex flex-col ml-20 bg-linear-to-t to-sky-500 from-gray-300'>
             <Toolbar />
-            <div className="p-4 w-full">
-                <h3 className="text-2xl font-bold mb-4">Your presentations</h3>
+            <div className="flex flex-col p-4 w-full items-center">
+                <h3 className="text-2xl font-bold mb-4 text-white">Your presentations</h3>
                 <div
                     className="gap-4 flex flex-wrap"
                 >

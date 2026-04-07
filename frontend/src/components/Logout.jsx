@@ -13,7 +13,7 @@ const LogOut = () => {
         <>
             <button 
                 onClick={handleLogOut}
-                className='text-md font-bold text-white flex flex-row-reverse bg-gray-500 p-2 rounded hover:bg-gray-700'
+                className='text-md font-bold text-white flex flex-row-reverse p-2 rounded bg-blue-500 hover:bg-blue-600'
             >
                 Logout
             </button>

@@ -1,17 +1,30 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import Alert from './Alert'
 import api from '../utils/api'
+import fileToBase64 from '../utils/encodeFile';
 
-const CreateSlideModal = ({ isOpen, onClose, onSuccess}) => {
+const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [thumbnail, setThumbnail] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        if (presentationToEdit) {
+            setName(presentationToEdit.name);
+            setDescription(presentationToEdit.description);
+            setThumbnail(presentationToEdit.thumbnail || '');
+        } else {
+            setName('');
+            setDescription('');
+            setThumbnail('');
+        }
+    }, [presentationToEdit, isOpen]);
+
     if (!isOpen) return null;
 
-    const handleCreate = async (e) => {
+    const handleSave = async (e) => {
         e.preventDefault();
 
         if (!name.trim()) return;
@@ -19,36 +32,61 @@ const CreateSlideModal = ({ isOpen, onClose, onSuccess}) => {
 
         try {
             const { store } = await api.GET('/store');
-            const newPresentation = {
-                id: Date.now().toString(),
-                name: name.trim(),
-                description: description.trim(),
-                thumbnail: thumbnail,
-                createdAt: new Date().toISOString(),
-                slides: [{}],
-            };
             const presentations = store.presentations || [];
+            let updatedPresentations;
+            let editedPresentation;
+
+            if (presentationToEdit){
+                editedPresentation = {
+                    ...presentationToEdit,
+                    name: name.trim(),
+                    description: description.trim(),
+                    thumbnail: thumbnail
+                };
+                updatedPresentations = presentations.map((item) => {
+                    if (item.id === presentationToEdit.id) {
+                        return {
+                            ...item,
+                            name: name.trim(),
+                            description: description.trim(),
+                            thumbnail: thumbnail
+                        };
+                    }
+                    return item;
+                });
+            } else {
+                const newPresentation = {
+                    id: Date.now().toString(),
+                    name: name.trim(),
+                    description: description.trim(),
+                    thumbnail: thumbnail,
+                    createdAt: new Date().toISOString(),
+                    slides: [{}],
+                };
+                updatedPresentations = [...presentations, newPresentation];
+                editedPresentation = newPresentation;
+            }
             const updateStore = {
                 ...store,
-                presentations: [...presentations, newPresentation]
+                presentations: updatedPresentations
             }
             await api.PUT('/store', { store: updateStore });
-            onSuccess(newPresentation);
+            onSuccess(editedPresentation)
             onClose();
         } catch (error) {
-            console.error('Failed to create presentation:', error);
-            setError('Failed to create presentation, Please try again.')
+            setError('Failed to save presentation, Please try again.')
         } finally {
             setLoading(false)
         }
     };
+    const isEditing = !!presentationToEdit;
     return (
         <>
             <Alert type="error" message={error} onClose={() => setError('')} />
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-25">
-                <div className="bg-gray-500 rounded-lg p-6 w-full max-w-xl shadow-xl">  
-                    <h1 className="text-xl font-semibold mb-4 text-black">New Presentation</h1>
-                    <form onSubmit={handleCreate}>
+                <div className="bg-gray-200 rounded-lg p-6 w-full max-w-xl shadow-xl">  
+                    <h1 className="text-xl font-semibold mb-4 text-black">{isEditing ? "Edit Presentation": "New Presentation"}</h1>
+                    <form onSubmit={handleSave}>
                         <div className="mb-4">
                             <label className="block text-sm font-medium mb-1 text-black text-left">Name</label>
                             <input
@@ -72,10 +110,23 @@ const CreateSlideModal = ({ isOpen, onClose, onSuccess}) => {
                         </div>
                         <div className="mb-4 flex flex-col items-start">
                             <label className="block text-sm font-medium mb-1 text-black text-left">Thumbnail</label>
+                            {thumbnail && (
+                                <img
+                                    src={thumbnail}
+                                    alt="Current thumbnail"
+                                    className="w-32 h-20 object-cover rounded mb-2 border"
+                                />
+                            )}
                             <input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => setThumbnail(e.target.files[0])}
+                                onChange={ async (e) => {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        const base64 = await fileToBase64(file)
+                                        setThumbnail(base64);
+                                    }
+                                }}
                                 className="text-sm border rounded p-2"
                             />
                         </div>
@@ -92,7 +143,7 @@ const CreateSlideModal = ({ isOpen, onClose, onSuccess}) => {
                                 disabled={loading || !name.trim()}
                                 className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
                             >
-                                {loading ? 'Creating...' : 'Create'}
+                                {loading ? 'Saving...' : (isEditing ? "Save Changes" : "Create")}
                             </button>
                         </div>
                     </form>
@@ -102,4 +153,4 @@ const CreateSlideModal = ({ isOpen, onClose, onSuccess}) => {
     );
 };
 
-export default CreateSlideModal;
+export default SaveSlideModal;
