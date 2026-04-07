@@ -29,30 +29,32 @@ const Login = () => {
     };
 
     return (
-        <div className='min-h-screen flex flex-col items-center justify-center'>
+        <div className='min-h-screen flex flex-col items-center justify-center h-14 bg-linear-to-t from-sky-500 to-indigo-500'>
             <Navbar />
             {error && (
                     <Alert type="error" message={error} onClose={() => setError(null)} />
             )}
             <h1 className='text-2xl font-bold mb-4'>Login</h1>
-            <form className='flex flex-col gap-4 w-full' onSubmit={handleSubmit}>
+            <form className='flex flex-col gap-2 w-md' onSubmit={handleSubmit}>
+                <p>Email</p>
                 <input
                     type="email"
-                    placeholder="Email"
-                    className="border rounded px-4 py-2"
+                    placeholder="example@email.com"
+                    className="border rounded px-4 py-2 mb-3"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
+                <p>Password</p>
                 <input
                     type="password"
-                    placeholder="Password"
-                    className="border rounded px-4 py-2"
+                    placeholder="Password1234"
+                    className="border rounded px-4 py-2 mb-3"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <button 
                     type="submit" 
-                    className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors"
+                    className="bg-blue-600 text-white px-6 py-2 my-4 rounded hover:bg-blue-700 transition-colors"
                     disabled={loading}
                     >
                     {loading ? 'Logging in...' : 'Login'}    

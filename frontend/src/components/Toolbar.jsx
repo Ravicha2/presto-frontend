@@ -1,7 +1,7 @@
 import { React, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import LogOut from './Logout';
-import CreateSlideModal from './CreateSlideModal';
+import UpsertSlideModal from './UpsertSlideModal';
 import ConfirmPopup from './ConfirmPopup';
 
 const Toolbar = () => {
@@ -16,20 +16,20 @@ const Toolbar = () => {
 
     return (
         <>
-            <aside className='fixed left-0 top-0 h-full w-20 bg-gray-900 flex flex-col items-center justify-between py-4 gap-4'>
-                <div>
-                    <Link to="/dashboard" className="text-xl font-bold text-white mb-4">
+            <aside className='fixed left-0 top-0 h-full w-20 flex flex-col items-center justify-between py-4 gap-4 bg-linear-to-t to-sky-500 from-gray-300'>
+                <div className="flex flex-col items-center">
+                    <Link to="/dashboard" className="text-xl font-bold text-white mb-4 mx-auto">
                         Presto
                     </Link>
                     {isDashboard && (
                         <>
                             <button 
-                            className='px-5 py-3 rounded-full bg-gray-500 text-white mt-10 hover:bg-gray-700'
+                            className='px-5 py-3 rounded-full bg-blue-500 text-white mt-10 hover:bg-blue-700'
                             onClick={() => setIsModalOpen(true)}
                             >
                                 +
                             </button>
-                            <p>create</p>
+                            <p className='text-white'>create</p>
                         </>
                     )}
                 </div>
@@ -37,7 +37,7 @@ const Toolbar = () => {
                     {!isDashboard && (
                         <div className="flex flex-col justify-end">
                             <button 
-                                className="p-3 rounded hover:bg-gray-700 text-white mb-3"
+                                className="p-3 rounded hover:bg-blue-500 text-white mb-3"
                                 onClick={() => setIsDelteOpen(true)}
                             >
                                 🗑️
@@ -51,7 +51,7 @@ const Toolbar = () => {
                     <LogOut />
                 </div>
             </aside>
-            <CreateSlideModal
+            <UpsertSlideModal
                   isOpen={isModalOpen}
                   onClose={() => setIsModalOpen(false)}
                   onSuccess={handleCreateSuccess}
