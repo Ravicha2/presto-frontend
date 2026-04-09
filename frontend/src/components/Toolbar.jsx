@@ -4,8 +4,9 @@ import LogOut from './Logout';
 import UpsertSlideModal from './UpsertSlideModal';
 import ConfirmPopup from './ConfirmPopup';
 import AddSlideButton from './AddSlideButton';
+import AddTextButton from './AddTextButton';
 
-const Toolbar = ({ onAddSlide }) => {
+const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer }) => {
     const location = useLocation();
     const isDashboard = location.pathname === '/dashboard';
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,13 +38,16 @@ const Toolbar = ({ onAddSlide }) => {
                 {/* add add slide component button */}
                 {/* add new slide to the right when clicked */}
 
+                {!isDashboard && (
+                    <div className="flex flex-col items-center">
+                        <AddSlideButton onAddSlide={onAddSlide} />
+                        <AddTextButton onSuccess={onAddElement} layer={getCurrentLayer}/>
+                        <AddSlideButton onAddSlide={onAddSlide} />
+                        <AddSlideButton onAddSlide={onAddSlide} />
+                    </div>
+                    )
+                }
                 <div>
-                    <AddSlideButton onAddSlide={onAddSlide} />
-                </div>
-                  
-                <div>
-
-
                     {/* on the slide */}
                     {!isDashboard && (
                         <div className="flex flex-col justify-end">
