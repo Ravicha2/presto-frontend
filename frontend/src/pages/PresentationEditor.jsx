@@ -5,6 +5,9 @@ import Toolbar from '../components/Toolbar';
 import UpsertSlideModal from '../components/UpsertSlideModal'
 import Alert from '../components/Alert';
 
+;
+
+
 const PresentationEditor = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -13,6 +16,7 @@ const PresentationEditor = () => {
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [error, setError] = useState('');
+
 
     useEffect(() => {
         const fetchPresentation = async () => {
@@ -42,11 +46,29 @@ const PresentationEditor = () => {
         window.dispatchEvent(new CustomEvent('presentationCreated', { detail: editPresentation }));
     }
 
+    const handleAddSlide = () => {
+        const newSlide = {
+            id: Date.now().toString(),
+            elements: [],
+            background: "#ffffff",
+        };
+    
+        setPresentation((prev) => {
+            const updatedSlides = [...(prev.slides || []), newSlide];
+            setCurrentSlideIndex(updatedSlides.length - 1);
+    
+            return {
+                ...prev,
+                slides: updatedSlides,
+            };
+        });
+    }
+
     return (
         <>
         <Alert type="error" message={error} onClose={() => setError('')} />
         <div className="min-h-screen flex flex-col ml-20 bg-gray-900 text-white">
-            <Toolbar />
+            <Toolbar onAddSlide={handleAddSlide} />
             <div className="flex flex-row justify-between items-center px-6 py-3 h-14 bg-linear-to-t to-sky-500 from-sky-500">
                 <div className="flex items-center gap-4 mx-2">
                     <img 
@@ -66,12 +88,16 @@ const PresentationEditor = () => {
                 </div>
             </div>
             <div className="flex-grow flex justify-center p-8 bg-gray-300 overflow-y-auto">
-                {/* change to slide component - need to be created */}
-                {/* when created -> show arrows left and right to move between slides */}
                 <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black">
-                    <p className="text-gray-500">
-                        Content for Slide {currentSlideIndex + 1} goes here
-                    </p>
+                    {currentSlide ? (
+                        <p className="text-gray-500">
+                            {currentSlide.text || `Slide ${currentSlideIndex + 1}`}
+                        </p>
+                    ) : (
+                        <p className="text-gray-500">No slide yet</p>
+                    )
+                    }
+                    
                 </div>
 
             </div>
