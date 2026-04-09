@@ -5,7 +5,7 @@ import UpsertSlideModal from './UpsertSlideModal';
 import ConfirmPopup from './ConfirmPopup';
 import AddSlideButton from './AddSlideButton';
 
-const Toolbar = () => {
+const Toolbar = ({ onAddSlide }) => {
     const location = useLocation();
     const isDashboard = location.pathname === '/dashboard';
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,7 +38,7 @@ const Toolbar = () => {
                 {/* add new slide to the right when clicked */}
 
                 <div>
-                    <AddSlideButton />
+                    <AddSlideButton onAddSlide={onAddSlide} />
                 </div>
                   
                 <div>
