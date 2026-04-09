@@ -87,7 +87,12 @@ const PresentationEditor = () => {
                     {presentation.slides?.length || 0} Slides
                 </div>
             </div>
-            <div className="flex-grow flex justify-center p-8 bg-gray-300 overflow-y-auto">
+            <div className="flex-grow flex justify-center items-center p-8 bg-gray-300 overflow-y-auto">
+                <div
+                    className="mr-10"
+                >
+                    move left
+                </div>
                 <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black">
                     {currentSlide ? (
                         <p className="text-gray-500">
@@ -98,6 +103,11 @@ const PresentationEditor = () => {
                     )
                     }
                     
+                </div>
+                <div
+                    className ="ml-10"
+                >
+                    move right
                 </div>
 
             </div>
