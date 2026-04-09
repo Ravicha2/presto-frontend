@@ -66,7 +66,8 @@ const PresentationEditor = () => {
                 </div>
             </div>
             <div className="flex-grow flex justify-center p-8 bg-gray-300 overflow-y-auto">
-                
+                {/* change to slide component - need to be created */}
+                {/* when created -> show arrows left and right to move between slides */}
                 <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black">
                     <p className="text-gray-500">
                         Content for Slide {currentSlideIndex + 1} goes here

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import LogOut from './Logout';
 import UpsertSlideModal from './UpsertSlideModal';
 import ConfirmPopup from './ConfirmPopup';
+import AddSlideButton from './AddSlideButton';
 
 const Toolbar = () => {
     const location = useLocation();
@@ -16,7 +17,7 @@ const Toolbar = () => {
 
     return (
         <>
-            <aside className='fixed left-0 top-0 h-full w-20 flex flex-col items-center justify-between py-4 gap-4 bg-linear-to-t to-sky-500 from-gray-300'>
+            <aside className='fixed left-0 top-0 h-full w-25 flex flex-col items-center justify-between py-4 gap-4 bg-linear-to-t to-sky-500 from-gray-300'>
                 <div className="flex flex-col items-center">
                     <Link to="/dashboard" className="text-xl font-bold text-white mb-4 mx-auto">
                         Presto
@@ -33,21 +34,34 @@ const Toolbar = () => {
                         </>
                     )}
                 </div>
+                {/* add add slide component button */}
+                {/* add new slide to the right when clicked */}
+
                 <div>
+                    <AddSlideButton />
+                </div>
+                  
+                <div>
+
+
+                    {/* on the slide */}
                     {!isDashboard && (
                         <div className="flex flex-col justify-end">
+                            {/* delete button */}
                             <button 
                                 className="p-3 rounded hover:bg-blue-500 text-white mb-3"
                                 onClick={() => setIsDelteOpen(true)}
                             >
                                 🗑️
                             </button>
+                            {/* delete button popup */}
                             <ConfirmPopup
                                 isOpen={isDeleteOpen}
                                 onClose={() => setIsDelteOpen(false)}
                             />
                         </div>
                     )}
+                    {/* logout button */}
                     <LogOut />
                 </div>
             </aside>

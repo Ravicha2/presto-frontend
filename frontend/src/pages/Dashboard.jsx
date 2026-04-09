@@ -12,7 +12,7 @@ const Dashboard = () => {
             setPresentations(store.presentations || []);
         };
         fetchPresentation();
-        const handleRefresh = () => fetchPresentation()
+        const handleRefresh = () => fetchPresentation();
         window.addEventListener('presentationCreated', handleRefresh);
         return () => window.removeEventListener('presentationCreated', handleRefresh)
     }, []);
