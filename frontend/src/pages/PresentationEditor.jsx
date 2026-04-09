@@ -64,6 +64,18 @@ const PresentationEditor = () => {
         });
     }
 
+    const handlePrevSlide = () => {
+        if (currentSlideIndex > 0) {
+            setCurrentSlideIndex(currentSlideIndex - 1);
+        }
+    }
+
+    const handleNextSlide = () => {
+        if (currentSlideIndex < (presentation.slides?.length || 0) - 1) {
+            setCurrentSlideIndex(currentSlideIndex + 1);
+        }
+    }
+
     return (
         <>
         <Alert type="error" message={error} onClose={() => setError('')} />
@@ -88,11 +100,12 @@ const PresentationEditor = () => {
                 </div>
             </div>
             <div className="flex-grow flex justify-center items-center p-8 bg-gray-300 overflow-y-auto">
-                <div
-                    className="mr-10"
+                <button
+                    onClick={handlePrevSlide}
+                    className="mr-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
                 >
-                    move left
-                </div>
+                    ←
+                </button>
                 <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black">
                     {currentSlide ? (
                         <p className="text-gray-500">
@@ -104,11 +117,12 @@ const PresentationEditor = () => {
                     }
                     
                 </div>
-                <div
-                    className ="ml-10"
+                <button
+                    onClick={handleNextSlide}
+                    className="ml-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
                 >
-                    move right
-                </div>
+                    →
+                </button>
 
             </div>
         </div>
