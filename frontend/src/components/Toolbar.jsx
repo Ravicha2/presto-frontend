@@ -5,8 +5,9 @@ import UpsertSlideModal from './UpsertSlideModal';
 import ConfirmPopup from './ConfirmPopup';
 import AddSlideButton from './AddSlideButton';
 import AddTextButton from './AddTextButton';
+import DeleteSlideButton from './DeleteSlideButton';
 
-const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer }) => {
+const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) => {
     const location = useLocation();
     const isDashboard = location.pathname === '/dashboard';
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,6 +45,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer }) => {
                         <AddTextButton onSuccess={onAddElement} layer={getCurrentLayer}/>
                         <AddSlideButton onAddSlide={onAddSlide} />
                         <AddSlideButton onAddSlide={onAddSlide} />
+                        <DeleteSlideButton onDeleteSlide={onDeleteSlide} />
                     </div>
                     )
                 }

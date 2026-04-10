@@ -70,6 +70,27 @@ const PresentationEditor = () => {
             setCurrentSlideIndex(currentSlideIndex + 1);
         }
     }
+
+    const handleDeleteSlide = () => {
+        const slides = presentation.slides || [];
+
+        if (slides.length === 1) {
+            setError("There is only one slide left. Please delete the presentation.")
+            return;
+        }
+
+        const updatedSlides = slides.filter((_, index) => index !== currentSlideIndex);
+
+        const newIndex = currentSlideIndex > 0 ? currentSlideIndex - 1 : 0;
+
+        setPresentation((prev) => ({
+            ...prev,
+            slides: updatedSlides,
+        }));
+
+        setCurrentSlideIndex(newIndex);
+    }
+
     const handleAddElement = async (newElement) => {
         const updatedSlides = presentation.slides.map((slide, index) => 
             index === currentSlideIndex
@@ -103,7 +124,12 @@ const PresentationEditor = () => {
         <>
         <Alert type="error" message={error} onClose={() => setError('')} />
         <div className="min-h-screen flex flex-col ml-20 bg-gray-900 text-white">
-            <Toolbar onAddSlide={handleAddSlide} onAddElement={handleAddElement} getCurrentLayer={getCurrentLayer}/>
+            <Toolbar
+                onAddSlide={handleAddSlide}
+                onAddElement={handleAddElement}
+                getCurrentLayer={getCurrentLayer}
+                onDeleteSlide={handleDeleteSlide}
+            />
             <div className="flex flex-row justify-between items-center px-6 py-3 h-14 bg-linear-to-t to-sky-500 from-sky-500">
                 <div className="flex items-center gap-4 mx-2">
                     <img 
