@@ -1,22 +1,15 @@
-
 const AddSlideButton = (props) => {
-
-
     return (
         <>
             <button
-                className='text-md font-bold text-white flex flex-row-reverse p-2 rounded bg-blue-500 hover:bg-blue-600'
+                className='px-5 py-3 rounded-full bg-blue-500 text-white mt-3 hover:bg-blue-700'
                 onClick={props.onAddSlide}
             >
-
-                Add Slide
-
+                +
             </button>
-        
+            <p className="text-white">Add Slide</p>
         </>
     )
-    
-
 }
 
 export default AddSlideButton;

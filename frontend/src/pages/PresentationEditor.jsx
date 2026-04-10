@@ -1,12 +1,9 @@
-import { React, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import Toolbar from '../components/Toolbar';
-import UpsertSlideModal from '../components/UpsertSlideModal'
+import UpsertSlideModal from '../components/UpsertSlideModal';
 import Alert from '../components/Alert';
-
-;
-
 
 const PresentationEditor = () => {
     const { id } = useParams();
@@ -16,7 +13,6 @@ const PresentationEditor = () => {
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [error, setError] = useState('');
-
 
     useEffect(() => {
         const fetchPresentation = async () => {
@@ -28,7 +24,6 @@ const PresentationEditor = () => {
             } catch {
                 setError('Presentation not found')
                 setLoading(false);
-                // load not found slide?
             }
         };
         fetchPresentation()
@@ -75,12 +70,40 @@ const PresentationEditor = () => {
             setCurrentSlideIndex(currentSlideIndex + 1);
         }
     }
+    const handleAddElement = async (newElement) => {
+        const updatedSlides = presentation.slides.map((slide, index) => 
+            index === currentSlideIndex
+                ? { ...slide, elements: [...(slide.elements || []), newElement] }
+                : slide
+        );
+
+        setPresentation(prev => ({
+            ...prev,
+            slides: updatedSlides,
+        }));
+
+        try {
+            const { store } = await api.GET('/store');
+            const updatedPresentation = { ...presentation, slides: updatedSlides };
+            const updatedPresentations = store.presentations.map(presentation => presentation.id === id ? updatedPresentation : presentation);
+            await api.PUT('/store', {
+                store: { ...store, presentations: updatedPresentations }
+            });
+        } catch (err) {
+            console.log(err)
+            setError('Failed to save element');
+        }
+    };
+
+    const getCurrentLayer = () => {
+        return presentation?.slides?.[currentSlideIndex]?.elements?.length || 0;
+    }
 
     return (
         <>
         <Alert type="error" message={error} onClose={() => setError('')} />
         <div className="min-h-screen flex flex-col ml-20 bg-gray-900 text-white">
-            <Toolbar onAddSlide={handleAddSlide} />
+            <Toolbar onAddSlide={handleAddSlide} onAddElement={handleAddElement} getCurrentLayer={getCurrentLayer}/>
             <div className="flex flex-row justify-between items-center px-6 py-3 h-14 bg-linear-to-t to-sky-500 from-sky-500">
                 <div className="flex items-center gap-4 mx-2">
                     <img 
@@ -108,14 +131,29 @@ const PresentationEditor = () => {
                 </button>
                 <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black">
                     {currentSlide ? (
-                        <p className="text-gray-500">
-                            {currentSlide.text || `Slide ${currentSlideIndex + 1}`}
-                        </p>
+                        currentSlide.elements?.length > 0 ? (
+                            currentSlide.elements.map((element) => (
+                                <div
+                                    key={element.id}
+                                    style={{
+                                        position: 'absolute',
+                                        left: `${element.x}px`,
+                                        top: `${element.y}px`,
+                                        width: `${element.width}px`,
+                                        height: `${element.height}px`,
+                                        fontSize: `${element.fontSize}em`,
+                                        color: element.color,
+                                    }}
+                                >
+                                    {element.type === 'text' && element.text}
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-gray-500">Slide {currentSlideIndex + 1}</p>
+                        )
                     ) : (
                         <p className="text-gray-500">No slide yet</p>
-                    )
-                    }
-                    
+                    )}
                 </div>
                 <button
                     onClick={handleNextSlide}
