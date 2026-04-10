@@ -59,6 +59,17 @@ const PresentationEditor = () => {
         });
     }
 
+    const handlePrevSlide = () => {
+        if (currentSlideIndex > 0) {
+            setCurrentSlideIndex(currentSlideIndex - 1);
+        }
+    }
+
+    const handleNextSlide = () => {
+        if (currentSlideIndex < (presentation.slides?.length || 0) - 1) {
+            setCurrentSlideIndex(currentSlideIndex + 1);
+        }
+    }
     const handleAddElement = async (newElement) => {
         const updatedSlides = presentation.slides.map((slide, index) => 
             index === currentSlideIndex
@@ -111,7 +122,13 @@ const PresentationEditor = () => {
                     {presentation.slides?.length || 0} Slides
                 </div>
             </div>
-            <div className="flex-grow flex justify-center p-8 bg-gray-300 overflow-y-auto">
+            <div className="flex-grow flex justify-center items-center p-8 bg-gray-300 overflow-y-auto">
+                <button
+                    onClick={handlePrevSlide}
+                    className="mr-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                >
+                    ←
+                </button>
                 <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black">
                     {currentSlide ? (
                         currentSlide.elements?.length > 0 ? (
@@ -138,6 +155,13 @@ const PresentationEditor = () => {
                         <p className="text-gray-500">No slide yet</p>
                     )}
                 </div>
+                <button
+                    onClick={handleNextSlide}
+                    className="ml-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                >
+                    →
+                </button>
+
             </div>
         </div>
         <UpsertSlideModal
