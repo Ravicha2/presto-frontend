@@ -31,22 +31,18 @@ const PresentationEditor = () => {
         return () => window.removeEventListener('presentationCreated', fetchPresentation)
     }, [id, navigate])
 
-
-    if (loading) return <div>Loading...</div>;
-    if (!presentation) return <div>Presentation not found</div>;
-
     useEffect(() => {
-        if (presentation?.slide?.length > 0 && !currentSlideId) {
-            setCurrentSlideId(presentation.slide[0].id);
+        if (presentation?.slides?.length > 0 && !currentSlideId) {
+            setCurrentSlideId(presentation.slides[0].id);
         }
     }, [presentation, currentSlideId]);
 
-    const currentSlide = presentation.slides?.find(slide => slide.id === currentSlideId);
-    const currentSlideIndex = presentation?.slide?.findIndex(slide => slide.id === currentSlideId) ?? -1;
+    const currentSlide = presentation?.slides?.find(slide => slide.id === currentSlideId);
+    const currentSlideIndex = presentation?.slides?.findIndex(slide => slide.id === currentSlideId) ?? -1;
 
     const isFirstSlide = currentSlideIndex === 0;
-    const isLastSlide =  currentSlideIndex === (presentation?.slide?.length ?? 0) -1;
-    const slideCount = presentation?.slide.length ?? 0;
+    const isLastSlide =  currentSlideIndex === (presentation?.slides?.length ?? 0) -1;
+    const slideCount = presentation?.slides.length ?? 0;
 
     const savePresentation = async (updatedPresentation) => {
         try {
@@ -73,7 +69,7 @@ const PresentationEditor = () => {
             background: "#ffffff",
         };
     
-        const updatedSlides = [...Alert(presentation.slides || []), newSlide];
+        const updatedSlides = [...(presentation.slides || []), newSlide];
         const updatedPresentation = { ...presentation, slides: updatedSlides };
 
         setPresentation(updatedPresentation);
@@ -129,6 +125,9 @@ const PresentationEditor = () => {
         return currentSlide?.elements?.length || 0;
     }
 
+    if (loading) return <div>Loading...</div>;
+    if (!presentation) return <div>Presentation not found</div>;
+
     return (
         <>
         <Alert type="error" message={error} onClose={() => setError('')} />
@@ -154,13 +153,14 @@ const PresentationEditor = () => {
                     </button>
                 </div>
                 <div className="text-sm text-white">
-                    {presentation.slides?.length || 0} Slides
+                    {slideCount} Slides
                 </div>
             </div>
             <div className="flex-grow flex justify-center items-center p-8 bg-gray-300 overflow-y-auto">
                 <button
                     onClick={handlePrevSlide}
-                    className="mr-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                    disabled={isFirstSlide}
+                    className={`mr-3 px-4 py-2 bg-blue-500 text-white rounded ${isFirstSlide ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'}`}
                 >
                     ←
                 </button>
@@ -192,11 +192,10 @@ const PresentationEditor = () => {
                 </div>
                 <button
                     onClick={handleNextSlide}
-                    className="ml-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                    className={`ml-3 px-4 py-2 bg-blue-500 text-white rounded ${isLastSlide ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700'}`}
                 >
                     →
                 </button>
-
             </div>
         </div>
         <UpsertSlideModal
