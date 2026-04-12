@@ -10,7 +10,6 @@ const PresentationEditor = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const [presentation, setPresentation] = useState(null);
-    // const [currentSlideId, setCurrentSlideId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [error, setError] = useState('');
@@ -43,14 +42,15 @@ const PresentationEditor = () => {
     useEffect(() => {
         if (presentation?.slides?.length > 0) {
             const maxIndex = presentation.slides.length - 1;
-            if (currentSlideIndex < 0 || currentSlide > maxIndex) {
+            if (currentSlideIndex > maxIndex) {
+                setSearchParams({ slide: maxIndex.toString() });
+            } else if (currentSlideIndex < 0) {
                 setSearchParams({ slide: '0' });
             }
         }
     }, [presentation, currentSlideIndex, setSearchParams]);
 
-    const currentSlide = presentation?.slides?.find(slide => slide.id === currentSlideId);
-    // const currentSlideIndex = presentation?.slides?.findIndex(slide => slide.id === currentSlideId) ?? -1;
+    const currentSlide = presentation?.slides?.[currentSlideIndex] ?? null;
 
     const isFirstSlide = currentSlideIndex === 0;
     const isLastSlide =  currentSlideIndex === (presentation?.slides?.length ?? 0) -1;
@@ -91,12 +91,14 @@ const PresentationEditor = () => {
 
     const handlePrevSlide = () => {
         if (!isFirstSlide && currentSlideIndex > 0) {
-            setCurrentSlideIndex(currentSlideIndex - 1);        }
+            setCurrentSlideIndex(currentSlideIndex - 1);
+        }
     };
 
     const handleNextSlide = () => {
         if (!isLastSlide && currentSlideIndex >= 0) {
-            setCurrentSlideIndex(currentSlideIndex + 1);        }
+            setCurrentSlideIndex(currentSlideIndex + 1);
+        }
     };
 
     const handleDeleteSlide = async () => {
@@ -106,16 +108,12 @@ const PresentationEditor = () => {
         }
 
         const updatedSlides = presentation.slides.filter(slide => slide.id !== currentSlideId);
-        let newSlideId;
-        if (currentSlideIndex > 0) {
-            newSlideId = updatedSlides[currentSlideIndex - 1]?.id
-        } else {
-            newSlideId = updatedSlides[0].id;
-        }
+        console.log(currentSlideIndex)
+        const newSlideIndex = currentSlideIndex > 0 ? currentSlideIndex - 1: 0; 
 
         const updatedPresentation = { ...presentation, slides: updatedSlides };
         setPresentation(updatedPresentation);
-        setCurrentSlideId(newSlideId);
+        setCurrentSlideIndex(newSlideIndex);
         await savePresentation(updatedPresentation);
     };
 
@@ -175,8 +173,8 @@ const PresentationEditor = () => {
                     ←
                 </button>
                 <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black relative z-10">
-                    {currentSlide ? (
-                        currentSlide.elements?.length > 0 ? (
+                    {currentSlide && (
+                        currentSlide.elements?.length > 0 && (
                             currentSlide.elements.map((element) => (
                                 <div
                                     key={element.id}
@@ -193,10 +191,7 @@ const PresentationEditor = () => {
                                     {element.type === 'text' && element.text}
                                 </div>
                             ))
-                        ) : (<></>
                         )
-                    ) : (
-                        <></>
                     )}
                     <p className="text-gray-500 bottom-2 left-2 absolute">{currentSlideIndex + 1}</p>
                 </div>
