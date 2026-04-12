@@ -4,7 +4,7 @@ import LogOut from './Logout';
 import UpsertSlideModal from './UpsertSlideModal';
 import ConfirmPopup from './ConfirmPopup';
 import AddSlideButton from './AddSlideButton';
-import AddTextModal from './AddTextModal';
+import SaveTextModal from './SaveTextModal';
 import DeleteSlideButton from './DeleteSlideButton';
 
 const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) => {
@@ -69,11 +69,6 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                             >
                                 🗑️
                             </button>
-                            {/* delete button popup */}
-                            <ConfirmPopup
-                                isOpen={isDeleteOpen}
-                                onClose={() => setIsDelteOpen(false)}
-                            />
                         </div>
                     )}
                     {/* logout button */}
@@ -81,13 +76,16 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                 </div>
             </aside>
             <UpsertSlideModal
-                  isOpen={isModalOpen}
-                  onClose={() => setIsModalOpen(false)}
-                  onSuccess={handleCreateSuccess}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={handleCreateSuccess}
             />
-
+            <ConfirmPopup
+                isOpen={isDeleteOpen}
+                onClose={() => setIsDelteOpen(false)}
+            />
             {!isDashboard && (
-                <AddTextModal
+                <SaveTextModal
                     isOpen={isAddTextOpen}
                     onClose={() => setIsAddTextOpen(false)}
                     onSuccess={onAddElement}
