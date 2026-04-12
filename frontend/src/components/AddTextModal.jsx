@@ -3,10 +3,10 @@ import Alert from "./Alert";
 import { createTextElement } from "../utils/elementFactory";
 
 const AddTextModal = ({ isOpen, onClose, onSuccess, layer }) => {
-    const [textWidth, setTextWidth] = useState(0);
-    const [textHeight, setTextHeight] = useState(0);
+    const [textWidth, setTextWidth] = useState(100);
+    const [textHeight, setTextHeight] = useState(100);
     const [text, setText] = useState("");
-    const [fontSize, setFontSize] = useState(0);
+    const [fontSize, setFontSize] = useState(2);
     const [color, setColor] = useState("");
     const [error, setError] = useState("");
 
@@ -31,7 +31,7 @@ const AddTextModal = ({ isOpen, onClose, onSuccess, layer }) => {
     return (
         <>
             <Alert type="error" message={error} onClose={() => setError('')} />
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-25">
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                 <div className="bg-gray-200 rounded-lg p-6 w-full max-w-xl shadow-xl">  
                     <h1 className="text-xl font-semibold mb-4 text-black">New Text</h1>
                     <form onSubmit={handleCreate}>

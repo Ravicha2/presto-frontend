@@ -4,7 +4,7 @@ import LogOut from './Logout';
 import UpsertSlideModal from './UpsertSlideModal';
 import ConfirmPopup from './ConfirmPopup';
 import AddSlideButton from './AddSlideButton';
-import AddTextButton from './AddTextButton';
+import AddTextModal from './AddTextModal';
 import DeleteSlideButton from './DeleteSlideButton';
 
 const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) => {
@@ -12,6 +12,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
     const isDashboard = location.pathname === '/dashboard';
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteOpen, setIsDelteOpen] = useState(false);
+    const [isAddTextOpen, setIsAddTextOpen] = useState(false);
 
     const handleCreateSuccess = (newPresentation) => {
         window.dispatchEvent(new CustomEvent('presentationCreated', { detail: newPresentation }));
@@ -46,7 +47,13 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                             <DeleteSlideButton onDeleteSlide={onDeleteSlide} />
                         </div>
                         <div>
-                            <AddTextButton onSuccess={onAddElement} layer={getCurrentLayer}/>
+                            <button
+                                className="px-5 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
+                                onClick={() => setIsAddTextOpen(true)}
+                            >
+                                T
+                            </button>
+                            <p className="text-white">Add Text</p>
                         </div>
                     </>
                     )
@@ -77,6 +84,12 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                   isOpen={isModalOpen}
                   onClose={() => setIsModalOpen(false)}
                   onSuccess={handleCreateSuccess}
+            />
+            <AddTextModal
+                isOpen={isAddTextOpen}
+                onClose={() => setIsAddTextOpen(false)}
+                onSuccess={onAddElement}
+                layer={getCurrentLayer()}
             />
         </>
     );

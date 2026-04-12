@@ -164,7 +164,7 @@ const PresentationEditor = () => {
                 >
                     ←
                 </button>
-                <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black">
+                <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black relative z-10">
                     {currentSlide ? (
                         currentSlide.elements?.length > 0 ? (
                             currentSlide.elements.map((element) => (
