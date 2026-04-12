@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../utils/api';
 import Toolbar from '../components/Toolbar';
 import UpsertSlideModal from '../components/UpsertSlideModal';
@@ -8,11 +8,20 @@ import Alert from '../components/Alert';
 const PresentationEditor = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [presentation, setPresentation] = useState(null);
-    const [currentSlideId, setCurrentSlideId] = useState(null);
+    // const [currentSlideId, setCurrentSlideId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [error, setError] = useState('');
+
+    const slideParam = searchParams.get('slide');
+    const currentSlideIndex = slideParam ? parseInt(slideParam, 10) : 0;
+    const currentSlideId = presentation?.slides?.[currentSlideIndex]?.id ?? null;
+
+    const setCurrentSlideIndex = (index) => {
+        setSearchParams({ slide: index.toString() });
+    };
 
     useEffect(() => {
         const fetchPresentation = async () => {
@@ -32,13 +41,16 @@ const PresentationEditor = () => {
     }, [id, navigate])
 
     useEffect(() => {
-        if (presentation?.slides?.length > 0 && !currentSlideId) {
-            setCurrentSlideId(presentation.slides[0].id);
+        if (presentation?.slides?.length > 0) {
+            const maxIndex = presentation.slides.length - 1;
+            if (currentSlideIndex < 0 || currentSlide > maxIndex) {
+                setSearchParams({ slide: '0' });
+            }
         }
-    }, [presentation, currentSlideId]);
+    }, [presentation, currentSlideIndex, setSearchParams]);
 
     const currentSlide = presentation?.slides?.find(slide => slide.id === currentSlideId);
-    const currentSlideIndex = presentation?.slides?.findIndex(slide => slide.id === currentSlideId) ?? -1;
+    // const currentSlideIndex = presentation?.slides?.findIndex(slide => slide.id === currentSlideId) ?? -1;
 
     const isFirstSlide = currentSlideIndex === 0;
     const isLastSlide =  currentSlideIndex === (presentation?.slides?.length ?? 0) -1;
@@ -73,20 +85,18 @@ const PresentationEditor = () => {
         const updatedPresentation = { ...presentation, slides: updatedSlides };
 
         setPresentation(updatedPresentation);
-        setCurrentSlideId(newSlide.id);
+        setCurrentSlideIndex(updatedSlides.length - 1);
         await savePresentation(updatedPresentation);
     }
 
     const handlePrevSlide = () => {
         if (!isFirstSlide && currentSlideIndex > 0) {
-            setCurrentSlideId(presentation.slide[currentSlideIndex - 1].id);
-        }
+            setCurrentSlideIndex(currentSlideIndex - 1);        }
     };
 
     const handleNextSlide = () => {
-        if (!isFirstSlide && currentSlideIndex > 0) {
-            setCurrentSlideId(presentation.slides[currentSlideIndex + 1].id)
-        }
+        if (!isLastSlide && currentSlideIndex >= 0) {
+            setCurrentSlideIndex(currentSlideIndex + 1);        }
     };
 
     const handleDeleteSlide = async () => {
@@ -183,12 +193,12 @@ const PresentationEditor = () => {
                                     {element.type === 'text' && element.text}
                                 </div>
                             ))
-                        ) : (
-                            <p className="text-gray-500">Slide {currentSlideIndex + 1}</p>
+                        ) : (<></>
                         )
                     ) : (
-                        <p className="text-gray-500">No slide yet</p>
+                        <></>
                     )}
+                    <p className="text-gray-500 bottom-2 left-2 absolute">{currentSlideIndex + 1}</p>
                 </div>
                 <button
                     onClick={handleNextSlide}
