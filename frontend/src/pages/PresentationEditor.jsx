@@ -9,7 +9,7 @@ const PresentationEditor = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [presentation, setPresentation] = useState(null);
-    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+    const [currentSlideId, setCurrentSlideId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [error, setError] = useState('');
@@ -31,93 +31,102 @@ const PresentationEditor = () => {
         return () => window.removeEventListener('presentationCreated', fetchPresentation)
     }, [id, navigate])
 
+
     if (loading) return <div>Loading...</div>;
     if (!presentation) return <div>Presentation not found</div>;
 
-    const currentSlide = presentation.slides?.[currentSlideIndex];
-
-    const handleCreateSuccess = (editPresentation) => {
-        setPresentation(editPresentation);
-        window.dispatchEvent(new CustomEvent('presentationCreated', { detail: editPresentation }));
-    }
-
-    const handleAddSlide = () => {
-        const newSlide = {
-            id: Date.now().toString(),
-            elements: [],
-            background: "#ffffff",
-        };
-    
-        setPresentation((prev) => {
-            const updatedSlides = [...(prev.slides || []), newSlide];
-            setCurrentSlideIndex(updatedSlides.length - 1);
-    
-            return {
-                ...prev,
-                slides: updatedSlides,
-            };
-        });
-    }
-
-    const handlePrevSlide = () => {
-        if (currentSlideIndex > 0) {
-            setCurrentSlideIndex(currentSlideIndex - 1);
+    useEffect(() => {
+        if (presentation?.slide?.length > 0 && !currentSlideId) {
+            setCurrentSlideId(presentation.slide[0].id);
         }
-    }
+    }, [presentation, currentSlideId]);
 
-    const handleNextSlide = () => {
-        if (currentSlideIndex < (presentation.slides?.length || 0) - 1) {
-            setCurrentSlideIndex(currentSlideIndex + 1);
-        }
-    }
+    const currentSlide = presentation.slides?.find(slide => slide.id === currentSlideId);
+    const currentSlideIndex = presentation?.slide?.findIndex(slide => slide.id === currentSlideId) ?? -1;
 
-    const handleDeleteSlide = () => {
-        const slides = presentation.slides || [];
+    const isFirstSlide = currentSlideIndex === 0;
+    const isLastSlide =  currentSlideIndex === (presentation?.slide?.length ?? 0) -1;
+    const slideCount = presentation?.slide.length ?? 0;
 
-        if (slides.length === 1) {
-            setError("There is only one slide left. Please delete the presentation.")
-            return;
-        }
-
-        const updatedSlides = slides.filter((_, index) => index !== currentSlideIndex);
-
-        const newIndex = currentSlideIndex > 0 ? currentSlideIndex - 1 : 0;
-
-        setPresentation((prev) => ({
-            ...prev,
-            slides: updatedSlides,
-        }));
-
-        setCurrentSlideIndex(newIndex);
-    }
-
-    const handleAddElement = async (newElement) => {
-        const updatedSlides = presentation.slides.map((slide, index) => 
-            index === currentSlideIndex
-                ? { ...slide, elements: [...(slide.elements || []), newElement] }
-                : slide
-        );
-
-        setPresentation(prev => ({
-            ...prev,
-            slides: updatedSlides,
-        }));
-
+    const savePresentation = async (updatedPresentation) => {
         try {
             const { store } = await api.GET('/store');
-            const updatedPresentation = { ...presentation, slides: updatedSlides };
-            const updatedPresentations = store.presentations.map(presentation => presentation.id === id ? updatedPresentation : presentation);
+            const updatedPresentations = store.presentations.map(p => p.id === id ? updatedPresentation : p);
             await api.PUT('/store', {
                 store: { ...store, presentations: updatedPresentations }
             });
         } catch (err) {
-            console.log(err)
-            setError('Failed to save element');
+            console.log(err);
+            setError('Failed to save changes');
         }
     };
 
+    const handleCreateSuccess = (editPresentation) => {
+        setPresentation(editPresentation);
+        window.dispatchEvent(new CustomEvent('presentationCreated', { detail: editPresentation }));
+    };
+
+    const handleAddSlide = async () => {
+        const newSlide = {
+            id: `slide-${Date.now()}`,
+            elements: [],
+            background: "#ffffff",
+        };
+    
+        const updatedSlides = [...Alert(presentation.slides || []), newSlide];
+        const updatedPresentation = { ...presentation, slides: updatedSlides };
+
+        setPresentation(updatedPresentation);
+        setCurrentSlideId(newSlide.id);
+        await savePresentation(updatedPresentation);
+    }
+
+    const handlePrevSlide = () => {
+        if (!isFirstSlide && currentSlideIndex > 0) {
+            setCurrentSlideId(presentation.slide[currentSlideIndex - 1].id);
+        }
+    };
+
+    const handleNextSlide = () => {
+        if (!isFirstSlide && currentSlideIndex > 0) {
+            setCurrentSlideId(presentation.slides[currentSlideIndex + 1].id)
+        }
+    };
+
+    const handleDeleteSlide = async () => {
+        if (slideCount === 1) {
+            setError("There is only one slide left. Please delete the presentation.")
+            return;
+        }
+
+        const updatedSlides = presentation.slides.filter(slide => slide.id !== currentSlideId);
+        let newSlideId;
+        if (currentSlideIndex > 0) {
+            newSlideId = updatedSlides[currentSlideIndex - 1]?.id
+        } else {
+            newSlideId = updatedSlides[0].id;
+        }
+
+        const updatedPresentation = { ...presentation, slides: updatedSlides };
+        setPresentation(updatedPresentation);
+        setCurrentSlideId(newSlideId);
+        await savePresentation(updatedPresentation);
+    };
+
+    const handleAddElement = async (newElement) => {
+        const updatedSlides = presentation.slides.map(slide => 
+            slide.id === currentSlideId
+                ? { ...slide, elements: [...(slide.elements || []), newElement] }
+                : slide
+        );
+
+        const updatedPresentation = { ...presentation, slides: updatedSlides };
+          setPresentation(updatedPresentation);
+          await savePresentation(updatedPresentation);
+    };
+
     const getCurrentLayer = () => {
-        return presentation?.slides?.[currentSlideIndex]?.elements?.length || 0;
+        return currentSlide?.elements?.length || 0;
     }
 
     return (

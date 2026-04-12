@@ -40,13 +40,15 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                 {/* add new slide to the right when clicked */}
 
                 {!isDashboard && (
-                    <div className="flex flex-col items-center">
-                        <AddSlideButton onAddSlide={onAddSlide} />
-                        <AddTextButton onSuccess={onAddElement} layer={getCurrentLayer}/>
-                        <AddSlideButton onAddSlide={onAddSlide} />
-                        <AddSlideButton onAddSlide={onAddSlide} />
-                        <DeleteSlideButton onDeleteSlide={onDeleteSlide} />
-                    </div>
+                    <>
+                        <div className="flex flex-col items-center">
+                            <AddSlideButton onAddSlide={onAddSlide} />
+                            <DeleteSlideButton onDeleteSlide={onDeleteSlide} />
+                        </div>
+                        <div>
+                            <AddTextButton onSuccess={onAddElement} layer={getCurrentLayer}/>
+                        </div>
+                    </>
                     )
                 }
                 <div>
