@@ -108,7 +108,7 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
                                     />
                                 </div>
                                 <div className="mb-2 mx-2">
-                                    <label className="block text-xs font-medium mb-1 text-black text-left">X Position</label>
+                                    <label className="block text-xs font-medium mb-1 text-black text-left">Y Position</label>
                                     <input
                                         type="number"
                                         min="0"

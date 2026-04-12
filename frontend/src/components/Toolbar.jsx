@@ -13,6 +13,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteOpen, setIsDelteOpen] = useState(false);
     const [isAddTextOpen, setIsAddTextOpen] = useState(false);
+    const [isUploadOpen, setIsUploadOpen] = useState(false);
 
     const handleCreateSuccess = (newPresentation) => {
         window.dispatchEvent(new CustomEvent('presentationCreated', { detail: newPresentation }));
@@ -46,7 +47,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                             <AddSlideButton onAddSlide={onAddSlide} />
                             <DeleteSlideButton onDeleteSlide={onDeleteSlide} />
                         </div>
-                        <div>
+                        <div className="flex flex-col items-center">
                             <button
                                 className="px-5 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
                                 onClick={() => setIsAddTextOpen(true)}
@@ -54,6 +55,24 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                                 T
                             </button>
                             <p className="text-white">Add Text</p>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <button
+                                className="px-5 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
+                                onClick={() => setIsUploadOpen(true)}
+                            >
+                                ⬆
+                            </button>
+                            <p className="text-white">Upload</p>
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <button
+                                className="px-5 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
+                                // onClick={() => setIsAddTextOpen(true)}
+                            >
+                                {`</>`}
+                            </button>
+                            <p className="text-white">Add Code</p>
                         </div>
                     </>
                     )
@@ -91,6 +110,40 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                     onSuccess={onAddElement}
                     layer={getCurrentLayer()}
                 />
+            )}
+            {/* Upload Modal */}
+            {isUploadOpen && (
+                <div className="fixed inset-0 flex top-4 justify-center z-50">
+                    <div className="bg-gray-100 rounded-lg p-6 w-80 h-50">
+                        <h2 className="text-xl font-bold mb-4 text-center text-black">Select Upload Type</h2>
+                        <div className="flex flex-row justify-center gap-3">
+                            <button
+                                className="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-700 font-medium"
+                                onClick={() => {
+                                    // Handle image upload
+                                    setIsUploadOpen(false);
+                                }}
+                            >
+                                🖼️ Image
+                            </button>
+                            <button
+                                className="px-4 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-700 font-medium"
+                                onClick={() => {
+                                    // Handle video upload
+                                    setIsUploadOpen(false);
+                                }}
+                            >
+                                🎬 Video
+                            </button>
+                        </div>
+                        <button
+                            className="mt-4 w-full px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                            onClick={() => setIsUploadOpen(false)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
             )}
         </>
     );
