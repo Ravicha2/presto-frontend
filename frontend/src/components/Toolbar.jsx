@@ -85,12 +85,15 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                   onClose={() => setIsModalOpen(false)}
                   onSuccess={handleCreateSuccess}
             />
-            <AddTextModal
-                isOpen={isAddTextOpen}
-                onClose={() => setIsAddTextOpen(false)}
-                onSuccess={onAddElement}
-                layer={getCurrentLayer()}
-            />
+
+            {!isDashboard && (
+                <AddTextModal
+                    isOpen={isAddTextOpen}
+                    onClose={() => setIsAddTextOpen(false)}
+                    onSuccess={onAddElement}
+                    layer={getCurrentLayer()}
+                />
+            )}
         </>
     );
 };
