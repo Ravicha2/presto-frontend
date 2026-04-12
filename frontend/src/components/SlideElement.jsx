@@ -17,7 +17,7 @@ const SlideElement = ({ element }) => {
             <div style={{
                 ...baseStyle,
                 fontSize: `${element.fontSize}em`,
-                color: element.colour
+                color: element.color
             }}>
                 {element.text}
             </div>

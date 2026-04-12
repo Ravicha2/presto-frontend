@@ -61,7 +61,11 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
                     description: description.trim(),
                     thumbnail: thumbnail,
                     createdAt: new Date().toISOString(),
-                    slides: [{}],
+                    slides: [{
+                        id: `slide-${Date.now()}`,
+                        elements: [],
+                        background: "#ffffff",
+                    }],
                 };
                 updatedPresentations = [...presentations, newPresentation];
                 editedPresentation = newPresentation;
