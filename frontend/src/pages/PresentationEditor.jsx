@@ -5,7 +5,6 @@ import Toolbar from '../components/Toolbar';
 import UpsertSlideModal from '../components/UpsertSlideModal';
 import Alert from '../components/Alert';
 import Canvas from '../components/Canvas';
-import SaveTextModal from '../components/SaveTextModal';
 
 const PresentationEditor = () => {
     const { id } = useParams();
@@ -14,10 +13,6 @@ const PresentationEditor = () => {
 
     const [presentation, setPresentation] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const [selectedElementId, setSelectedElementId] = useState(null);
-    const [editingElement, setEditingElement] = useState(null);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -125,54 +120,20 @@ const PresentationEditor = () => {
         await savePresentation(updatedPresentation);
     };
 
-    const handleAddElement = async (newElement) => {
-        const updatedSlides = presentation.slides.map(slide => 
+    const handleElementsChange = async (updatedElements) => {
+        const updatedSlides = presentation.slides.map(slide =>
             slide.id === currentSlideId
-                ? { ...slide, elements: [...(slide.elements || []), newElement] }
+                ? { ...slide, elements: updatedElements }
                 : slide
         );
-
         const updatedPresentation = { ...presentation, slides: updatedSlides };
         setPresentation(updatedPresentation);
         await savePresentation(updatedPresentation);
     };
 
-    const handleElementEdit = (elementId) => {
-        const element = currentSlide.elements.find(element => element.id === elementId);
-        if (element) {
-            setEditingElement(element);
-            setIsEditModalOpen(true)
-        }
-    }
-
-    const handleEditSuccess = (updatedElement) => {
-        const updatedSlides = presentation.slides.map(slide => 
-            slide.id === currentSlideId 
-            ? {
-                ...slide,
-                elements: slide.elements.map(element => 
-                    element.id === updatedElement.id ? updatedElement : element
-                )
-            }
-            : slide
-        );
-        const updatedPresentation = { ...presentation, slides: updatedSlides };
-        setPresentation(updatedPresentation);
-        savePresentation(updatedPresentation);
-        setIsEditModalOpen(false);
-    }
-
-    const handleElementDelete = async (elementId) => {
-        const updateSlides = presentation.slides.map(slide => 
-            slide.id === currentSlideId
-            ? { ...slide, elements: slide.elements.filter(element => element.id !== elementId) }
-            : slide
-        );
-        const updatedPresentation = { ...presentation, slides: updateSlides };
-        setPresentation(updatedPresentation);
-        await savePresentation(updatedPresentation);
-        setSelectedElementId(null);
-    }
+    const handleAddElement = (newElement) => {
+        handleElementsChange([...(currentSlide.elements || []), newElement]);
+    };
 
     const getCurrentLayer = () => {
         return currentSlide?.elements?.length || 0;
@@ -219,12 +180,9 @@ const PresentationEditor = () => {
                 </button>
                 <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black relative z-10">
                     {currentSlide && (
-                        <Canvas                                                                                
-                            elements={currentSlide.elements || []}                                             
-                            onElementSelect={setSelectedElementId}                                             
-                            onElementEdit={handleElementEdit}                                                  
-                            onElementDelete={handleElementDelete}                                              
-                            selectedElementId={selectedElementId}                                              
+                        <Canvas
+                            elements={currentSlide.elements || []}
+                            onElementsChange={handleElementsChange}
                         />
                     )}
                     <p className="text-gray-500 bottom-2 left-2 absolute">{currentSlideIndex + 1}</p>
@@ -242,13 +200,6 @@ const PresentationEditor = () => {
             presentationToEdit={presentation}
             onClose={() => setIsModalOpen(false)}
             onSuccess={handleCreateSuccess}
-        />
-        <SaveTextModal 
-            isOpen={isEditModalOpen}
-            onClose={() => setIsEditModalOpen(false)}
-            onSuccess={handleEditSuccess}
-            mode="edit"
-            element={editingElement}
         />
         </>
     );

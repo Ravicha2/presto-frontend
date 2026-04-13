@@ -105,17 +105,21 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                 onClose={() => setIsDelteOpen(false)}
             />
             {!isDashboard && (
+                <>
                 <SaveTextModal
                     isOpen={isAddTextOpen}
                     onClose={() => setIsAddTextOpen(false)}
                     onSuccess={onAddElement}
                     layer={getCurrentLayer()}
                 />
+                <SaveUploadModal
+                    isOpen={isUploadOpen}
+                    onClose={() => setIsUploadOpen(false)}
+                    onSuccess={onAddElement}
+                    layer={getCurrentLayer()}
+                />
+                </>
             )}
-            <SaveUploadModal
-                isOpen={isUploadOpen}
-                onClose={() => setIsUploadOpen(false)}
-            />
         </>
     );
 };
