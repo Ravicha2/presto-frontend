@@ -88,7 +88,7 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
         <>
             <Alert type="error" message={error} onClose={() => setError('')} />
             <div className="fixed inset-0 z-40" onClick={onClose} />
-            <div className="fixed right-0 top-14 h-full w-90 z-50 shadow-lg rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
+            <div className="fixed left-25 top-13 h-full w-90 z-50 shadow-lg rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
                 <div className="w-full max-w-xl p-2">  
                     <h1 className="text-md font-semibold mb-2 text-black">
                         {isEditMode ? "Edit Text" : "New Text"}
@@ -182,19 +182,19 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
                                 required
                             />
                         </div>
-                        <div className="flex justify-start gap-2 ml-2">
-                        <button
-                                type="submit"
-                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
-                            >
-                                create
-                            </button>
+                        <div className="flex justify-end gap-2 ml-2">
                             <button
                                 type="button"
                                 onClick={onClose}
                                 className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
                             >
                                 Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                            >
+                                {mode === 'add' ? 'create' : 'Save Change'}
                             </button>
                         </div>
                     </form>

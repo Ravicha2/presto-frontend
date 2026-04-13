@@ -5,8 +5,8 @@ const SlideElement = ({ element }) => {
         position: 'absolute',
         left: `${element.x}%`,
         top: `${element.y}%`,
-        width: `${element.width}`,
-        height: `${element.height}`,
+        width: `${element.width}%`,
+        height: `${element.height}%`,
         zIndex: element.layer,
         border: '1px solid #ccc',
         overflow: 'auto'
@@ -27,7 +27,10 @@ const SlideElement = ({ element }) => {
     if (element.type === ELEMENT_TYPES.IMAGE) {
         return (
             <img
-                style={baseStyle}
+                style={{
+                    ...baseStyle,
+                    objectFit: 'contain',
+                }}
                 src={element.src}
                 alt={element.alt}
             />
