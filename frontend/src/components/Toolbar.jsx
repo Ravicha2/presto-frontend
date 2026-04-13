@@ -5,6 +5,7 @@ import UpsertSlideModal from './UpsertSlideModal';
 import ConfirmPopup from './ConfirmPopup';
 import AddSlideButton from './AddSlideButton';
 import SaveTextModal from './SaveTextModal';
+import SaveUploadModal from './SaveUploadModal';
 import DeleteSlideButton from './DeleteSlideButton';
 
 const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) => {
@@ -111,40 +112,10 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                     layer={getCurrentLayer()}
                 />
             )}
-            {/* Upload Modal */}
-            {isUploadOpen && (
-                <div className="fixed inset-0 flex top-4 justify-center z-50">
-                    <div className="bg-gray-100 rounded-lg p-6 w-80 h-50">
-                        <h2 className="text-xl font-bold mb-4 text-center text-black">Select Upload Type</h2>
-                        <div className="flex flex-row justify-center gap-3">
-                            <button
-                                className="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-700 font-medium"
-                                onClick={() => {
-                                    // Handle image upload
-                                    setIsUploadOpen(false);
-                                }}
-                            >
-                                🖼️ Image
-                            </button>
-                            <button
-                                className="px-4 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-700 font-medium"
-                                onClick={() => {
-                                    // Handle video upload
-                                    setIsUploadOpen(false);
-                                }}
-                            >
-                                🎬 Video
-                            </button>
-                        </div>
-                        <button
-                            className="mt-4 w-full px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-                            onClick={() => setIsUploadOpen(false)}
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            )}
+            <SaveUploadModal
+                isOpen={isUploadOpen}
+                onClose={() => setIsUploadOpen(false)}
+            />
         </>
     );
 };
