@@ -3,6 +3,7 @@ import SlideElement from "./SlideElement";
 import ContextMenu from "./ContextMenu";
 import SaveTextModal from "./SaveTextModal";
 import Uploadimage from "./ImageModal";
+import UploadVideo from "./VideoModal";
 import { ELEMENT_TYPES } from "../utils/elementFactory";
 
 const Canvas = ({
@@ -87,6 +88,24 @@ const Canvas = ({
                         </div>
                     </>
                 );
+            case ELEMENT_TYPES.VIDEO:
+                return (
+                    <>
+                        <div className="fixed inset-0 z-40" onClick={handleCloseEditModal} />
+                        <div className="fixed left-25 top-13 h-full w-90 z-50 shadow-lg rounded-md bg-white" onClick={(e) => e.stopPropagation}>
+                            <div className="w-full max-w-xl p-2">
+                                <h1 className="text-xl font-semibold mb-2 text-black">Edit Video</h1>
+                                <UploadVideo
+                                    isOpen={true}
+                                    onClose={handleCloseEditModal}
+                                    onSuccess={handleEditSuccess}
+                                    mode="edit"
+                                    element={editingElement}
+                                />
+                            </div>
+                        </div>
+                    </>
+                );
             default:
                 return null;
         }
@@ -107,13 +126,9 @@ const Canvas = ({
                             onClick={(e) => handleClick(e, element.id)}
                             onDoubleClick={(e) => handleDoubleClick(e, element.id)}
                             onContextMenu={(e) => handleContextMenu(e, element.id)}
-                            className={`cursor-pointer ${
-                                isSelected
-                                ? 'border-transparent'
-                                : 'hover: border-gray-300'
-                            }`}
+                            className={'cursor-pointer'}
                         >
-                            <SlideElement element={element} />
+                            <SlideElement element={element} isSelected={isSelected} />
                         </div>
                     );
                 })}

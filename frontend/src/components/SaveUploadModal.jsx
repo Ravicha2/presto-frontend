@@ -44,7 +44,21 @@ const SaveUploadModal = ({ isOpen, onClose, onSuccess, layer }) => {
                                 Video
                         </button>
                     </div>
-                    {isImage ? <Uploadimage onClose={onClose} onSuccess={onSuccess} onError={setError} layer={layer} /> : <UploadVideo onClose={onClose} />}
+                    {isImage ? 
+                        <Uploadimage 
+                            onClose={onClose} 
+                            onSuccess={onSuccess} 
+                            onError={setError} 
+                            layer={layer} 
+                        /> 
+                        : 
+                        <UploadVideo 
+                            onClose={onClose} 
+                            onSuccess={onSuccess} 
+                            onError={setError} 
+                            layer={layer} 
+                        />
+                    }
                 </div>
             </div>
         </>
