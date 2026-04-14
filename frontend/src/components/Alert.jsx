@@ -8,7 +8,7 @@ const Alert = ({ type = 'error', message, onClose }) => {
     if (!message) return null;
 
     return (
-        <div className={`${styles[type]} px-4 py-3 rounded-lg flex items-center justify-between absolute top-17 right-5`}>
+        <div className={`${styles[type]} px-4 py-3 rounded-lg flex items-center justify-between absolute top-17 right-5 z-[9999]`}>
             <p className="text-sm">{message}</p>
             {onClose && (
                 <button 
