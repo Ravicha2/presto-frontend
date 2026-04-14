@@ -7,6 +7,7 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [thumbnail, setThumbnail] = useState('');
+    const [thumbnailFileName, setThumbnailFileName] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -15,10 +16,12 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
             setName(presentationToEdit.name);
             setDescription(presentationToEdit.description);
             setThumbnail(presentationToEdit.thumbnail || '');
+            setThumbnailFileName('');
         } else {
             setName('');
             setDescription('');
             setThumbnail('');
+            setThumbnailFileName('');
         }
     }, [presentationToEdit, isOpen]);
 
@@ -87,7 +90,7 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
     return (
         <>
             <Alert type="error" message={error} onClose={() => setError('')} />
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-25">
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-25" onClick={onClose}>
                 <div className="bg-gray-200 rounded-lg p-6 w-full max-w-xl shadow-xl">  
                     <h1 className="text-xl font-semibold mb-4 text-black">{isEditing ? "Edit Presentation": "New Presentation"}</h1>
                     <form onSubmit={handleSave}>
@@ -121,18 +124,34 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
                                     className="w-32 h-20 object-cover rounded mb-2 border"
                                 />
                             )}
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={ async (e) => {
-                                    const file = e.target.files[0];
-                                    if (file) {
-                                        const base64 = await fileToBase64(file)
-                                        setThumbnail(base64);
-                                    }
-                                }}
-                                className="text-sm border rounded p-2"
-                            />
+                            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 mb-2 w-full text-center hover:border-blue-400 transition-colors cursor-pointer">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={ async (e) => {
+                                        const file = e.target.files[0];
+                                        if (file) {
+                                            const base64 = await fileToBase64(file)
+                                            setThumbnail(base64);
+                                            setThumbnailFileName(file.name);
+                                        }
+                                    }}
+                                    className="hidden"
+                                    id="thumbnail-upload"
+                                />
+                                <label htmlFor="thumbnail-upload" className="cursor-pointer">
+                                    {thumbnailFileName ? (
+                                        <span className="text-sm text-gray-700">{thumbnailFileName}</span>
+                                    ) : (
+                                        <>
+                                            <p className="text-2xl mb-1">🖼️</p>
+                                            <p className="text-xs text-gray-500">
+                                                Click to select thumbnail
+                                            </p>
+                                        </>
+                                    )}
+                                </label>
+                            </div>
                         </div>
                         <div className="flex justify-end gap-2">
                             <button
