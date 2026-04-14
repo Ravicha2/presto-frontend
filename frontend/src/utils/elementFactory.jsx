@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
+// element factory, function to create elements with default values
 export const ELEMENT_TYPES = {
     TEXT: 'text',
     IMAGE: 'image',

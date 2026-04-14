@@ -16,3 +16,6 @@
 
 # Choosing colours
 - rather than typing hex number, use color input for less technical user, eyedrop also available
+
+# Bring to Front/Send to Back
+- when we do presentation we want order of element shown on slide, bring to front and send to back as implemented for that, done by right click

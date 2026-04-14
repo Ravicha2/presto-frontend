@@ -3,6 +3,7 @@ import Alert from './Alert'
 import api from '../utils/api'
 import fileToBase64 from '../utils/encodeFile';
 
+// modal for create/ edit slide
 const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -11,6 +12,7 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    // get presentation state (if any)
     useEffect(() => {
         if (presentationToEdit) {
             setName(presentationToEdit.name);
@@ -25,8 +27,10 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
         }
     }, [presentationToEdit, isOpen]);
 
+    // close modal if the state is not open
     if (!isOpen) return null;
 
+    // saving presentation logic
     const handleSave = async (e) => {
         e.preventDefault();
 
@@ -38,7 +42,8 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
             const presentations = store.presentations || [];
             let updatedPresentations;
             let editedPresentation;
-
+            
+            // if edit presentation
             if (presentationToEdit){
                 editedPresentation = {
                     ...presentationToEdit,
@@ -46,6 +51,7 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
                     description: description.trim(),
                     thumbnail: thumbnail
                 };
+
                 updatedPresentations = presentations.map((item) => {
                     if (item.id === presentationToEdit.id) {
                         return {
@@ -58,6 +64,7 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
                     return item;
                 });
             } else {
+                // new presentation
                 const newPresentation = {
                     id: Date.now().toString(),
                     name: name.trim(),
@@ -73,6 +80,7 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
                 updatedPresentations = [...presentations, newPresentation];
                 editedPresentation = newPresentation;
             }
+            // write/overwrite the presentation with new presentation
             const updateStore = {
                 ...store,
                 presentations: updatedPresentations
@@ -86,6 +94,7 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
             setLoading(false)
         }
     };
+
     const isEditing = !!presentationToEdit;
     return (
         <>

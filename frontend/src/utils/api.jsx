@@ -1,6 +1,7 @@
 import config from '../../backend.config.json';                                                                                                 
 const BASE_URL = `http://localhost:${config.BACKEND_PORT}`;                                                                                     
-                                                                                                                                                  
+             
+// all abstracted REST api function
 class API {                                                                                                                                     
     getToken() {                          
         return localStorage.getItem('token');

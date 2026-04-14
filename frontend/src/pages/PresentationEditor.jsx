@@ -7,6 +7,7 @@ import Alert from '../components/Alert';
 import Canvas from '../components/Canvas';
 import editIcon from '../assets/edit-button-svgrepo-com.svg';
 
+// presentation editor page
 const PresentationEditor = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -26,6 +27,7 @@ const PresentationEditor = () => {
         setSearchParams({ slide: index.toString() });
     };
 
+    // get current presentation params
     useEffect(() => {
         const fetchPresentation = async () => {
             try {
@@ -43,6 +45,7 @@ const PresentationEditor = () => {
         return () => window.removeEventListener('presentationCreated', fetchPresentation)
     }, [id, navigate])
 
+    // get current slide index
     useEffect(() => {
         if (presentation?.slides?.length > 0) {
             const maxIndex = presentation.slides.length - 1;
@@ -60,6 +63,7 @@ const PresentationEditor = () => {
     const isLastSlide =  currentSlideIndex === (presentation?.slides?.length ?? 0) -1;
     const slideCount = presentation?.slides.length ?? 0;
 
+    // save new state of presentation
     const savePresentation = async (updatedPresentation) => {
         try {
             const { store } = await api.GET('/store');
@@ -73,11 +77,13 @@ const PresentationEditor = () => {
         }
     };
 
+    // shout out when presentation created
     const handleCreateSuccess = (editPresentation) => {
         setPresentation(editPresentation);
         window.dispatchEvent(new CustomEvent('presentationCreated', { detail: editPresentation }));
     };
 
+    // add slide logic, create new empty slide
     const handleAddSlide = async () => {
         const newSlide = {
             id: `slide-${Date.now()}`,
@@ -93,18 +99,21 @@ const PresentationEditor = () => {
         await savePresentation(updatedPresentation);
     }
 
+    // move back one slide
     const handlePrevSlide = () => {
         if (!isFirstSlide && currentSlideIndex > 0) {
             setCurrentSlideIndex(currentSlideIndex - 1);
         }
     };
 
+    // move forward one slide
     const handleNextSlide = () => {
         if (!isLastSlide && currentSlideIndex >= 0) {
             setCurrentSlideIndex(currentSlideIndex + 1);
         }
     };
 
+    // delete slide
     const handleDeleteSlide = async () => {
         if (slideCount === 1) {
             setError("There is only one slide left. Please delete the presentation.")
@@ -112,7 +121,6 @@ const PresentationEditor = () => {
         }
 
         const updatedSlides = presentation.slides.filter(slide => slide.id !== currentSlideId);
-        console.log(currentSlideIndex)
         const newSlideIndex = currentSlideIndex > 0 ? currentSlideIndex - 1: 0; 
 
         const updatedPresentation = { ...presentation, slides: updatedSlides };
@@ -121,6 +129,7 @@ const PresentationEditor = () => {
         await savePresentation(updatedPresentation);
     };
 
+    // update element in a slide when element changed
     const handleElementsChange = async (updatedElements) => {
         const updatedSlides = presentation.slides.map(slide =>
             slide.id === currentSlideId
@@ -132,6 +141,7 @@ const PresentationEditor = () => {
         await savePresentation(updatedPresentation);
     };
 
+    // add element in a slide when element craeted
     const handleAddElement = (newElement) => {
         handleElementsChange([...(currentSlide.elements || []), newElement]);
     };

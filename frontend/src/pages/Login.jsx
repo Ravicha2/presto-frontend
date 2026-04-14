@@ -4,6 +4,7 @@ import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../components/Alert';
 
+// login page
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

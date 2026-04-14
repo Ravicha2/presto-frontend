@@ -4,6 +4,7 @@ import Navbar from '../components/navbar';
 import Alert from '../components/Alert';
 import api from '../utils/api';
 
+// register page
 const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

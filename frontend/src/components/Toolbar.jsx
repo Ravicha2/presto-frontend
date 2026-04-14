@@ -18,6 +18,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
     const [isAddTextOpen, setIsAddTextOpen] = useState(false);
     const [isUploadOpen, setIsUploadOpen] = useState(false);
 
+    // when presentation created, dispatch event so modal know that it need to be closed
     const handleCreateSuccess = (newPresentation) => {
         window.dispatchEvent(new CustomEvent('presentationCreated', { detail: newPresentation }));
     }
@@ -25,10 +26,12 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
     return (
         <>
             <aside className='fixed left-0 top-0 h-full w-25 flex flex-col items-center justify-between py-4 gap-4 bg-linear-to-t to-sky-500 from-gray-300'>
+                {/* top left logo */}
                 <div className="flex flex-col items-center">
                     <Link to="/dashboard" className="text-xl font-bold text-white mb-4 mx-auto">
                         Presto
                     </Link>
+                    {/* if dashboard, render add presentation button. else render the slide tools */}
                     {isDashboard && (
                         <>
                             <button 
@@ -41,15 +44,15 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                         </>
                     )}
                 </div>
-                {/* add add slide component button */}
-                {/* add new slide to the right when clicked */}
 
+                {/* add / delete slide button */}
                 {!isDashboard && (
                     <>
                         <div className="flex flex-col items-center">
                             <AddSlideButton onAddSlide={onAddSlide} />
                             <DeleteSlideButton onDeleteSlide={onDeleteSlide} />
                         </div>
+                        {/* slide tools - text, upload(image & video), code */}
                         <div className="flex flex-col items-center">
                             <button
                                 className="px-5 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
@@ -81,7 +84,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                     )
                 }
                 <div>
-                    {/* on the slide */}
+                    {/* also delete presentation button */}
                     {!isDashboard && (
                         <div className="flex flex-col justify-end">
                             {/* delete button */}
@@ -108,18 +111,18 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
             />
             {!isDashboard && (
                 <>
-                <SaveTextModal
-                    isOpen={isAddTextOpen}
-                    onClose={() => setIsAddTextOpen(false)}
-                    onSuccess={onAddElement}
-                    layer={getCurrentLayer()}
-                />
-                <SaveUploadModal
-                    isOpen={isUploadOpen}
-                    onClose={() => setIsUploadOpen(false)}
-                    onSuccess={onAddElement}
-                    layer={getCurrentLayer()}
-                />
+                    <SaveTextModal
+                        isOpen={isAddTextOpen}
+                        onClose={() => setIsAddTextOpen(false)}
+                        onSuccess={onAddElement}
+                        layer={getCurrentLayer()}
+                    />
+                    <SaveUploadModal
+                        isOpen={isUploadOpen}
+                        onClose={() => setIsUploadOpen(false)}
+                        onSuccess={onAddElement}
+                        layer={getCurrentLayer()}
+                    />
                 </>
             )}
         </>

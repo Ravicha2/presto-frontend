@@ -1,3 +1,4 @@
+// encode file to base64 to be saved on backend
 const fileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
