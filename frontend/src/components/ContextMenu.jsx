@@ -16,7 +16,7 @@ const ContextMenu = ({ x, y, options, onClose}) => {
     return (
         <div
             ref={menuRef}
-            className="fixed bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50"
+            className="fixed bg-white border border-gray-200 rounded-md shadow-lg py-1 z-[9999]"
             style={{ left:x, top: y}}
         >
             {options.map((option, index) => (
