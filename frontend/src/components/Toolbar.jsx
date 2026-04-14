@@ -7,6 +7,8 @@ import AddSlideButton from './AddSlideButton';
 import SaveTextModal from './SaveTextModal';
 import SaveUploadModal from './SaveUploadModal';
 import DeleteSlideButton from './DeleteSlideButton';
+import uploadIcon from '../assets/cloud-computing-upload-svgrepo-com.svg';
+import codeIcon from '../assets/code-svgrepo-com.svg';
 
 const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) => {
     const location = useLocation();
@@ -59,19 +61,19 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                         </div>
                         <div className="flex flex-col items-center">
                             <button
-                                className="px-5 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
+                                className="px-3 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
                                 onClick={() => setIsUploadOpen(true)}
                             >
-                                ⬆
+                                <img className='w-7 h-7' src={uploadIcon}/>
                             </button>
                             <p className="text-white">Upload</p>
                         </div>
                         <div className="flex flex-col items-center">
                             <button
-                                className="px-5 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
+                                className="px-3 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
                                 // onClick={() => setIsAddTextOpen(true)}
                             >
-                                {`</>`}
+                                <img className='w-7 h-7 brightness-0 invert-[1]' src={codeIcon}/>
                             </button>
                             <p className="text-white">Add Code</p>
                         </div>

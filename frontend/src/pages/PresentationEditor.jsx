@@ -5,6 +5,7 @@ import Toolbar from '../components/Toolbar';
 import UpsertSlideModal from '../components/UpsertSlideModal';
 import Alert from '../components/Alert';
 import Canvas from '../components/Canvas';
+import editIcon from '../assets/edit-button-svgrepo-com.svg';
 
 const PresentationEditor = () => {
     const { id } = useParams();
@@ -153,7 +154,7 @@ const PresentationEditor = () => {
                 onDeleteSlide={handleDeleteSlide}
             />
             <div className="flex flex-row justify-between items-center px-6 py-3 h-14 bg-linear-to-t to-sky-500 from-sky-500">
-                <div className="flex items-center gap-4 mx-2">
+                <div className="flex items-center gap-2 mx-2">
                     <img 
                         className="w-10 h-10 rounded bg-gray-200"
                         src={presentation.thumbnail || null}
@@ -161,9 +162,12 @@ const PresentationEditor = () => {
                     <h1 className="text-lg font-semibold">{presentation.name}</h1>
                     <button 
                         onClick={() => setIsModalOpen(true)}
-                        className="cursor-pointer"
+                        className="cursor-pointer text-xl px-1 object-contain"
                     >
-                        📝
+                        <img 
+                            className='w-5 h-5 invert brightness-0 invert-[1]'
+                            src={editIcon} alt="Edit"
+                        />
                     </button>
                 </div>
                 <div className="text-sm text-white">
