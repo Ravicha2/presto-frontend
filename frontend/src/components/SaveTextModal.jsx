@@ -8,8 +8,6 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
     const [text, setText] = useState("");
     const [fontSize, setFontSize] = useState(2);
     const [color, setColor] = useState("#000000");
-    const [posX, setPosX] = useState(0)
-    const [posY, setPosY] = useState(0)
     const [error, setError] = useState("");
 
     const normalizeHexColor = (color) => {
@@ -28,8 +26,6 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
             setText(element.text ?? "");
             setFontSize(element.fontSize ?? 2);
             setColor(element.color ?? "#000000");
-            setPosX(element.x ?? 0);
-            setPosY(element.y ?? 0);
         }
     }, [mode, element]);
 
@@ -40,8 +36,6 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
               setText("");
               setFontSize(2);
               setColor("#000000");
-              setPosX(0);
-              setPosY(0);
         }
     }, [isOpen, mode]);
 
@@ -67,13 +61,9 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
         } else {
             const updatedElement = {
                 ...element,
-                width: textWidth,
-                height: textHeight,
                 text: text,
                 fontSize: fontSize,
                 color: color,
-                x: posX,
-                y: posY
             };
             onSuccess(updatedElement);
         }
@@ -94,32 +84,7 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
                         {isEditMode ? "Edit Text" : "New Text"}
                     </h1>
                     <form onSubmit={handleSubmit}>
-                        {isEditMode && (
-                            <div className="flex flex-row justify-between">
-                                <div className="mb-2 mx-2">
-                                    <label className="block text-xs font-medium mb-1 text-black text-left">X Position</label>
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        max="100"
-                                        value={posX}
-                                        onChange={(e) => setPosX(Number(e.target.value))}
-                                        className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
-                                    />
-                                </div>
-                                <div className="mb-2 mx-2">
-                                    <label className="block text-xs font-medium mb-1 text-black text-left">Y Position</label>
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        max="100"
-                                        value={posY}
-                                        onChange={(e) => setPosY(Number(e.target.value))}
-                                        className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
-                                    />
-                                </div>
-                            </div>
-                        )}
+                        {!isEditMode && (
                         <div className="flex flex-row justify-between">
                             <div className="mb-2 mx-2">
                                 <label className="block text-xs font-medium mb-1 text-black text-left">Box Width</label>
@@ -145,6 +110,9 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
                                     placeholder="Enter Box Height"
                                 />
                             </div>
+                        </div>
+                        )}
+                        <div className="flex flex-row justify-between">
                             <div className="mb-2 mx-2">
                                 <label className="block text-xs text-xs font-medium mb-1 text-black text-left">Font Size</label>
                                 <input

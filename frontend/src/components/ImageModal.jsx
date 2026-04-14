@@ -6,8 +6,6 @@ import fileToBase64 from "../utils/encodeFile";
 const Uploadimage = ({ onClose, onError, mode="add" ,onSuccess, layer, element }) => {
     const [file, setFile] = useState(null);
     const [url, setUrl] = useState(element?.src || '');
-    const [posX, setPosX] = useState(element?.x || 0);
-    const [posY, setPosY] = useState(element?.y || 0);
     const [width, setWidth] = useState(element?.width || 30);
     const [height, setHeight] = useState(element?.height || 30);
     const [description, setDescription] = useState(element?.alt || "");
@@ -40,10 +38,6 @@ const Uploadimage = ({ onClose, onError, mode="add" ,onSuccess, layer, element }
                     ...element,
                     src: src,
                     alt: description || file?.name || "image",
-                    width,
-                    height,
-                    x: posX,
-                    y: posY,
                 };
                 onSuccess(updatedElement);
             } else {
@@ -110,32 +104,7 @@ const Uploadimage = ({ onClose, onError, mode="add" ,onSuccess, layer, element }
                             placeholder="https://example.com/image.png"
                         />
                     </div>
-                    {mode === "edit" && (
-                        <div className="flex flex-row justify-between">
-                            <div className="mb-3">
-                                <label className="block text-xs font-medium text-black text-left">Position X</label>
-                                <input
-                                    className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
-                                    type="number"
-                                    min="0"
-                                    max="100"
-                                    value={posX}
-                                    onChange={(e) => setPosX(Number(e.target.value))}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label className="block text-xs font-medium text-black text-left">Position Y</label>
-                                <input
-                                    className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
-                                    type="number"
-                                    min="0"
-                                    max="100"
-                                    value={posY}
-                                    onChange={(e) => setPosY(Number(e.target.value))}
-                                />
-                            </div>
-                        </div>
-                    )}
+                    {mode === "add" && (
                     <div className="flex flex-row justify-around gap-6 mb-3">
                         <div className="w-full">
                             <label className="block text-xs font-medium mb-1 text-black text-left">Width</label>
@@ -160,6 +129,7 @@ const Uploadimage = ({ onClose, onError, mode="add" ,onSuccess, layer, element }
                             />
                         </div>
                     </div>
+                    )}
                     <div className="mb-3">
                         <label className="block text-xs font-medium text-black text-left">Description</label>
                         <textarea
