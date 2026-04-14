@@ -4,6 +4,7 @@ import api from '../utils/api';
 import Toolbar from '../components/Toolbar';
 import UpsertSlideModal from '../components/UpsertSlideModal';
 import Alert from '../components/Alert';
+import SlideControlPanel from '../components/SlideControlPanel';
 import Canvas from '../components/Canvas';
 import editIcon from '../assets/edit-button-svgrepo-com.svg';
 
@@ -156,7 +157,7 @@ const PresentationEditor = () => {
     return (
         <>
         <Alert type="error" message={error} onClose={() => setError('')} />
-        <div className="min-h-screen flex flex-col ml-20 bg-gray-900 text-white">
+        <div className="h-screen flex flex-col ml-20 bg-white text-white">
             <Toolbar
                 onAddSlide={handleAddSlide}
                 onAddElement={handleAddElement}
@@ -165,16 +166,16 @@ const PresentationEditor = () => {
             />
             <div className="flex flex-row justify-between items-center px-6 py-3 h-14 bg-linear-to-t to-sky-500 from-sky-500">
                 <div className="flex items-center gap-2 mx-2">
-                    <img 
+                    <img
                         className="w-10 h-10 rounded bg-gray-200"
                         src={presentation.thumbnail || null}
                     />
                     <h1 className="text-lg font-semibold">{presentation.name}</h1>
-                    <button 
+                    <button
                         onClick={() => setIsModalOpen(true)}
                         className="cursor-pointer text-xl px-1 object-contain"
                     >
-                        <img 
+                        <img
                             className='w-5 h-5 invert brightness-0 invert-[1]'
                             src={editIcon} alt="Edit"
                         />
@@ -184,7 +185,7 @@ const PresentationEditor = () => {
                     {slideCount} Slides
                 </div>
             </div>
-            <div className="flex-grow flex justify-center items-center p-8 bg-gray-300 overflow-y-auto">
+            <div className="flex-grow flex justify-center items-center p-8 bg-gray-300 overflow-hidden min-h-0">
                 <button
                     onClick={handlePrevSlide}
                     disabled={isFirstSlide}
@@ -208,6 +209,7 @@ const PresentationEditor = () => {
                     →
                 </button>
             </div>
+            <SlideControlPanel />
         </div>
         <UpsertSlideModal
             isOpen={isModalOpen}
