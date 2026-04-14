@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import Alert from './Alert';
 
+// delete slide pop up warning
 const ConfirmDeletePopup = ({ isOpen, onClose }) => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -10,6 +11,7 @@ const ConfirmDeletePopup = ({ isOpen, onClose }) => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [error, setError] = useState(null)
 
+    // memorize the slide current presentation
     useEffect(() => {
         if (isOpen) {
             api.GET(`/store`).then(response => {
@@ -21,6 +23,7 @@ const ConfirmDeletePopup = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
     if (!presentation) return null;
 
+    // exclude slide from backend
     const handleDelete = async () => {
         setIsDeleting(true);
         try {

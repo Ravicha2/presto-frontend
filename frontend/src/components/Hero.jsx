@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// landing page hero section
 const Hero = () => {
     return (
         <>

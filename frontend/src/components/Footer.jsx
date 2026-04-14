@@ -1,5 +1,5 @@
 import React from 'react';
-
+//generic footer
 const Footer = () => {
     return (
         <>

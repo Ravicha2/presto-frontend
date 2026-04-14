@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 
+// context menu window
 const ContextMenu = ({ x, y, options, onClose}) => {
+    
     const menuRef = useRef(null)
 
     useEffect(() => {
@@ -14,6 +16,7 @@ const ContextMenu = ({ x, y, options, onClose}) => {
     }, [onClose]);
 
     return (
+        // attached reference to div
         <div
             ref={menuRef}
             className="fixed bg-white border border-gray-200 rounded-md shadow-lg py-1 z-[9999]"

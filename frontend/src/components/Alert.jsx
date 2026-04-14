@@ -1,5 +1,6 @@
 import React from "react";
 
+// generic alert popup, support success and error
 const Alert = ({ type = 'error', message, onClose }) => {
     const styles = {
         error: 'bg-red-50 text-red-600 border border-red-200',

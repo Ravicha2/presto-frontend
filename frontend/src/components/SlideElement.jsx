@@ -35,6 +35,7 @@ const SlideElement = ({
 }) => {
     const [isHovered, setIsHovered] = useState(false);
 
+    // convert % to px
     const x = (element.x / 100) * canvasWidth;
     const y = (element.y / 100) * canvasHeight;
     const width = (element.width / 100) * canvasWidth;
@@ -46,6 +47,7 @@ const SlideElement = ({
     const pxToPercentX = (px) => (px / canvasWidth) * 100;
     const pxToPercenty = (px) => (px / canvasHeight) * 100;
 
+    // calculate new position after drag
     const handleDragStop = (e, d) => {
         const maxX = canvasWidth - width;
         const maxY = canvasHeight - height;
@@ -57,6 +59,8 @@ const SlideElement = ({
             y: pxToPercenty(clampedY),
         });
     };
+
+    // calculate new width/height/x/y after resize
     const handleResizeStop = (e, direction, ref, delta, position) => {
         const newWidth = parseFloat(ref.style.width);
         const newHeight = parseFloat(ref.style.height);
@@ -71,6 +75,8 @@ const SlideElement = ({
             height: pxToPercenty(newHeight),
         });
     };
+
+    // render elements with defualt properties
     const renderContent = () => {
         if (element.type === ELEMENT_TYPES.TEXT) {
             return (
@@ -137,6 +143,8 @@ const SlideElement = ({
         }
         return null;
     };
+
+    // rnd rendering logic
     return (
         <Rnd
             position={{ x, y }}
