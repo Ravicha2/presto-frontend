@@ -16,6 +16,7 @@ const PresentationEditor = () => {
 
     const [presentation, setPresentation] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isPanelOpen, setIsPanelOpen] = useState(false);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -185,7 +186,7 @@ const PresentationEditor = () => {
                     {slideCount} Slides
                 </div>
             </div>
-            <div className="flex-grow flex justify-center items-center p-8 bg-gray-300 overflow-hidden min-h-0">
+            <div className={`flex-grow flex justify-center items-center bg-gray-300 overflow-hidden min-h-0 transition-all duration-300 ${isPanelOpen ? 'p-10' : 'p-8'}`}>
                 <button
                     onClick={handlePrevSlide}
                     disabled={isFirstSlide}
@@ -193,7 +194,7 @@ const PresentationEditor = () => {
                 >
                     ←
                 </button>
-                <div className="bg-white w-full max-w-5xl aspect-video shadow-2xl flex items-center justify-center text-black relative z-10">
+                <div className={`bg-white w-full aspect-video shadow-2xl flex items-center justify-center text-black relative z-10 ${isPanelOpen ? 'max-w-4xl' : 'max-w-5xl'}`}>
                     {currentSlide && (
                         <Canvas
                             elements={currentSlide.elements || []}
@@ -209,7 +210,14 @@ const PresentationEditor = () => {
                     →
                 </button>
             </div>
-            <SlideControlPanel />
+            <SlideControlPanel
+                slides={presentation.slides}
+                currentSlideIndex={currentSlideIndex}
+                setCurrentSlideIndex={setCurrentSlideIndex}
+                slideCount={slideCount}
+                isOpen={isPanelOpen}
+                setIsOpen={setIsPanelOpen}
+            />
         </div>
         <UpsertSlideModal
             isOpen={isModalOpen}
