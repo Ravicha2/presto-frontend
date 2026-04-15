@@ -5,72 +5,72 @@ import Alert from './Alert';
 
 // delete slide pop up warning
 const ConfirmDeletePopup = ({ isOpen, onClose }) => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [presentation, setPresentation] = useState(null);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [error, setError] = useState(null)
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [presentation, setPresentation] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState(null)
 
-    // memorize the slide current presentation
-    useEffect(() => {
-        if (isOpen) {
-            api.GET(`/store`).then(response => {
-                const current = response.store.presentations.find(p => p.id === id);
-                setPresentation(current);
-            });
-        }
-    }, [isOpen, id]);
-    if (!isOpen) return null;
-    if (!presentation) return null;
-
-    // exclude slide from backend
-    const handleDelete = async () => {
-        setIsDeleting(true);
-        try {
-            const response = await api.GET("/store");
-            const filteredPresentations = response.store.presentations.filter(p => p.id !== id);   
-            await api.PUT(`/store`, {                                          
-                store: {                                                       
-                    ...response.store,                    
-                    presentations: filteredPresentations
-                }
-            });
-            onClose();
-            navigate('/dashboard');
-        } catch (error) {
-            console.error(error)
-            setError('delete failed')
-        } finally {
-            setIsDeleting(false);
-        }
+  // memorize the slide current presentation
+  useEffect(() => {
+    if (isOpen) {
+      api.GET(`/store`).then(response => {
+        const current = response.store.presentations.find(p => p.id === id);
+        setPresentation(current);
+      });
     }
+  }, [isOpen, id]);
+  if (!isOpen) return null;
+  if (!presentation) return null;
 
-    return (
-        <>
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                <Alert type="error" message={error} onClose={() => setError('')} />
-                <div className="bg-white p-6 rounded-lg flex flex-col items-center">
-                    <h3 className='text-black font-bold'>Are you sure?</h3>
-                    <p className='text-black mb-10'> {presentation.name} will permanently deleted</p>
-                    <div className='flex flex-row'>
-                        <button 
-                            onClick={onClose}
-                            className='text-black mx-6 hover:bg-gray-100 py-2 px-4 rounded'
-                        >
+  // exclude slide from backend
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await api.GET("/store");
+      const filteredPresentations = response.store.presentations.filter(p => p.id !== id);   
+      await api.PUT(`/store`, {                                          
+        store: {                                                       
+          ...response.store,                    
+          presentations: filteredPresentations
+        }
+      });
+      onClose();
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(error)
+      setError('delete failed')
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
+  return (
+    <>
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <Alert type="error" message={error} onClose={() => setError('')} />
+        <div className="bg-white p-6 rounded-lg flex flex-col items-center">
+          <h3 className='text-black font-bold'>Are you sure?</h3>
+          <p className='text-black mb-10'> {presentation.name} will permanently deleted</p>
+          <div className='flex flex-row'>
+            <button 
+              onClick={onClose}
+              className='text-black mx-6 hover:bg-gray-100 py-2 px-4 rounded'
+            >
                             No
-                        </button>
-                        <button 
-                            onClick={handleDelete}
-                            className='text-white bg-red-500 hover:bg-red-600 mx-6 py-2 px-4 rounded'
-                            disabled={isDeleting}
-                        >
-                            {isDeleting ? 'Deleting...' : 'Yes'}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
+            </button>
+            <button 
+              onClick={handleDelete}
+              className='text-white bg-red-500 hover:bg-red-600 mx-6 py-2 px-4 rounded'
+              disabled={isDeleting}
+            >
+              {isDeleting ? 'Deleting...' : 'Yes'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default ConfirmDeletePopup
