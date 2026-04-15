@@ -1,5 +1,43 @@
-const SlideControlPanel = ({ slides, currentSlideIndex, setCurrentSlideIndex, slideCount, isOpen, setIsOpen }) => {
+import { useState, Fragment } from "react";
+import SlidePreview from "./SlidePreview";
+
+const SlideControlPanel = ({ slides, currentSlideIndex, setCurrentSlideIndex, slideCount, isOpen, setIsOpen, onReorderSlides }) => {
     const togglePanel = () => setIsOpen(prev => !prev);
+    const [dragIndex, setDragIndex] = useState(null);
+    const [dragOverIndex, setDragOverIndex] = useState(null);
+
+    const handleDragStart = (e, index) => {
+        setDragIndex(index);
+        e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handleDragOver = (e, index) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const rectangle = e.currentTarget.getBoundingClientRect();
+        const midX = rectangle.left + rectangle.width / 2;
+        const gapIndex = e.clientX < midX ? index : index + 1;
+        setDragOverIndex(gapIndex);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        if (dragIndex !== null && dragOverIndex !== null) {
+            const reordered = [...slides];
+            const [moved] = reordered.splice(dragIndex, 1);
+            const insertIndex = dragOverIndex > dragIndex ? dragOverIndex - 1 : dragOverIndex;
+            reordered.splice(insertIndex, 0, moved);
+            onReorderSlides?.(reordered);
+            setCurrentSlideIndex(insertIndex);
+        }
+        setDragIndex(null);
+        setDragOverIndex(null);
+    };
+
+    const handleDragEnd = () => {
+        setDragIndex(null);
+        setDragOverIndex(null);
+    };
 
     return (
         <div className="relative">
@@ -27,37 +65,48 @@ const SlideControlPanel = ({ slides, currentSlideIndex, setCurrentSlideIndex, sl
                         >
                             &times;
                         </button>
-                        <div className='flex gap-4 overflow-x-auto pb-2 px-1'>
+                        <div
+                            className='flex items-center gap-3 overflow-x-auto pb-2 px-1'
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={handleDrop}
+                        >
+                            {dragOverIndex === 0 && (
+                                <div className="flex-shrink-0 self-stretch rounded-full bg-blue-500" />
+                            )}
                             {slides?.map((slide, index) => (
-                                <button
-                                    key={slide.id}
-                                    onClick={() => {
-                                        setCurrentSlideIndex(index);
-                                    }}
-                                    className={`felx-shrink-0 cursor-pointer rounded-lg border-2 transition-all duration-200 hover:shadow-lg
-                                    ${index === currentSlideIndex 
-                                        ? 'border-blue-500 shadow-md'
-                                        : 'border-blue-300 hover-border-gray-400'
-                                    }`}
-                                    style={{ width: `${Math.max(80, Math.min(160, 700/ slideCount))}px` }}
-                                >
-                                    <div 
-                                        className='w-full aspect-video rounded-t-md flex items-center justify-center text-xs'
-                                        style={{ background: slide.background || '#ffffff' }}
+                                // same as <></> but Fragment allow key property
+                                <Fragment key={slide.id}>
+                                    <button
+                                        draggable
+                                        onDragStart={(e) => handleDragStart(e, index)}
+                                        onDragOver={(e) => handleDragOver(e, index)}
+                                        onDragEnd={handleDragEnd}
+                                        onClick={() => { setCurrentSlideIndex(index) }}
+                                        className={`flex-shrink-0 cursor-pointer rounded-lg border-2 transition-all duration-200 hover:shadow-lg
+                                        ${index === currentSlideIndex
+                                            ? 'border-blue-500 shadow-md'
+                                            : 'border-gray-300 hover:border-gray-400'
+                                        }
+                                        ${dragIndex === index ? 'opacity-50' : ''}
+                                        `}
+                                        style={{ width: `${Math.max(80, Math.min(160, 700/ slideCount))}px` }}
                                     >
-                                        <span className={`${slide.background === '#ffffff' || !slide.background ? 'text-gray-400' : 'text-gray-200'}`}>
-                                              {slide.elements?.length || 0} elements
-                                          </span>
-                                      </div>
-                                      <div className={`text-center py-0 text-xs font-medium rounded-b-md
-                                          ${index === currentSlideIndex
-                                              ? 'bg-blue-500 text-white'
-                                              : 'bg-gray-100 text-gray-600'
-                                          }`}
-                                      >
-                                          Slide {index + 1}
-                                      </div>
-                                </button>
+                                        <div className='w-full aspect-video rounded-t-md overflow-hidden'>
+                                              <SlidePreview slide={slide} />
+                                        </div>
+                                        <div className={`text-center py-0 text-xs font-medium rounded-b-md
+                                            ${index === currentSlideIndex
+                                                ? 'bg-blue-500 text-white'
+                                                : 'bg-gray-100 text-gray-600'
+                                            }`}
+                                        >
+                                            Slide {index + 1}
+                                        </div>
+                                    </button>
+                                    {dragOverIndex === index + 1 && (
+                                        <div className="flex-shrink-0 w-1 self-stretch rounded-full bg-blue-500" />
+                                    )}
+                                </Fragment>
                             ))}
                         </div>
                     </div>

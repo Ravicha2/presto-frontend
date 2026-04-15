@@ -16,7 +16,7 @@ const PresentationEditor = () => {
 
     const [presentation, setPresentation] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isPanelOpen, setIsPanelOpen] = useState(false);
+    const [isPanelOpen, setIsPanelOpen] = useState(true);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -152,6 +152,12 @@ const PresentationEditor = () => {
         return currentSlide?.elements?.length || 0;
     }
 
+    const handleReorderSlides = async (reorderSlides) => {
+        const updatePresentation = { ...presentation, slides: reorderSlides };
+        setPresentation(updatePresentation);
+        await savePresentation(updatePresentation);
+    }
+
     if (loading) return <div>Loading...</div>;
     if (!presentation) return <div>Presentation not found</div>;
 
@@ -217,6 +223,7 @@ const PresentationEditor = () => {
                 slideCount={slideCount}
                 isOpen={isPanelOpen}
                 setIsOpen={setIsPanelOpen}
+                onReorderSlides={handleReorderSlides}
             />
         </div>
         <UpsertSlideModal
