@@ -40,8 +40,8 @@ const SlideControlPanel = ({ slides, currentSlideIndex, setCurrentSlideIndex, sl
     };
 
     return (
-        <div className="relative">
-            <div className="flex flex-col pt-1 justify-center items-center border-t border-gray-300">
+        <div className="relative pl-10">
+            <div className="flex flex-col pt-1 justify-center items-center">
                 <button
                     onClick={togglePanel}
                     className={`py-1 rounded text-sm font-semibold transition-all duration-300 cursor-pointer w-10 flex justify-center mb-1
@@ -53,18 +53,12 @@ const SlideControlPanel = ({ slides, currentSlideIndex, setCurrentSlideIndex, sl
                     <span className='text-md'>{isOpen ? '⬇️' : '⬆️'}</span>
                 </button>
                 {isOpen && (
-                <div className='z-[9999] flex items-center w-full ml-30'>
+                <div className='flex items-center w-full'>
                     <div 
                         className='absolute inset-0'
                         onClick={togglePanel}
                     />
                     <div className='relative w-full bg-white shadow-2xl animate-slide-up'>
-                        <button
-                            onClick={togglePanel}
-                            className="absolute top-3 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold cursor-pointer leading-none"
-                        >
-                            &times;
-                        </button>
                         <div
                             className='flex items-center gap-3 overflow-x-auto pb-2 px-1'
                             onDragOver={(e) => e.preventDefault()}
@@ -89,7 +83,7 @@ const SlideControlPanel = ({ slides, currentSlideIndex, setCurrentSlideIndex, sl
                                         }
                                         ${dragIndex === index ? 'opacity-50' : ''}
                                         `}
-                                        style={{ width: `${Math.max(80, Math.min(160, 700/ slideCount))}px` }}
+                                        style={{ width: `${Math.max(60, Math.min(100, 700/ slideCount))}px` }}
                                     >
                                         <div className='w-full aspect-video rounded-t-md overflow-hidden'>
                                               <SlidePreview slide={slide} />
