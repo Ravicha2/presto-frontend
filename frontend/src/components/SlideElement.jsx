@@ -160,12 +160,10 @@ const SlideElement = ({
           margin: 0,
           whiteSpace: 'pre-wrap',
           wordBreak: 'break-word',
-          userSelect: 'none',
-          pointerEvents: 'none'
         }}>
           <code
             className={`hljs language-${lang}`}
-            style={{ fontSize: `${element.fontSize}em` }}
+            style={{ fontSize: `${element.fontSize}%`, pointerEvents: 'none' }}
             dangerouslySetInnerHTML={{ __html: highlighted }}
           />
         </pre>

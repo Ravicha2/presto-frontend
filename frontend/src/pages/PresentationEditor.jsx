@@ -126,7 +126,7 @@ const PresentationEditor = () => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+      if (event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA") return;
       if (event.key === "ArrowLeft") {
         handlePrevSlide();
       }
