@@ -22,6 +22,21 @@ const Canvas = ({
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [canvasHeight, setCanvasHeight] = useState(0);
 
+  // delete selected element on Backspace
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Backspace" && selectedElementId) {
+        // don't delete if user is typing in an input/textarea
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        e.preventDefault();
+        onElementsChange?.(elements.filter(element => element.id !== selectedElementId));
+        setSelectedElementId(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedElementId, elements, onElementsChange]);
+
   useEffect(() => {
     const updateSize = () => {
       if (canvasRef.current) {
