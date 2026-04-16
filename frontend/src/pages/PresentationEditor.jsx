@@ -140,7 +140,7 @@ const PresentationEditor = () => {
       return;
     }
 
-    const updatedSlides = presentation.slides.filter(slide => slide.id !== currentSlideId);
+    const updatedSlides = presentation.slides.filter((_, index) => index !== currentSlideIndex);
     const newSlideIndex = currentSlideIndex > 0 ? currentSlideIndex - 1: 0; 
 
     const updatedPresentation = { ...presentation, slides: updatedSlides };
