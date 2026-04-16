@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../utils/api';
 import Toolbar from '../components/Toolbar';
@@ -114,6 +114,24 @@ const PresentationEditor = () => {
       setCurrentSlideIndex(currentSlideIndex + 1);
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowLeft") {
+        handlePrevSlide();
+      }
+
+      if (event.key === "ArrowRight") {
+        handleNextSlide();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [currentSlideIndex, presentation]);
 
   // delete slide
   const handleDeleteSlide = async () => {
