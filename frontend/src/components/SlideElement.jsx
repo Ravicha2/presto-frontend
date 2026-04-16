@@ -86,6 +86,7 @@ const SlideElement = ({
       return (
         <div style={{
           fontSize: `${element.fontSize}em`,
+          fontFamily: element.fontFamily ?? 'Arial',
           color: element.color,
           width: '100%',
           height: '100%',

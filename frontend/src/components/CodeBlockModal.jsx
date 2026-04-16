@@ -52,8 +52,8 @@ const CodeBlockModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", eleme
 
         if (mode == "add") {
             const resolvedLanguage = language === "auto"
-              ? hljs.highlightAuto(code, ['javascript', 'python', 'c']).language ?? "javascript"
-              : language;
+                ? hljs.highlightAuto(code, ['javascript', 'python', 'c']).language ?? "javascript"
+                : language;
             const newElement = createCodeElement(
             {
                 width: `${codeWidth}%`,
@@ -135,14 +135,14 @@ const CodeBlockModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", eleme
                     </div>
                 )}
                 <div className="mb-2 mx-2">
-                  <label className="block text-xs font-medium mb-1 text-black text-left">
-                      Language
-                  </label>
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                    className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
-                  >
+                    <label className="block text-xs font-medium mb-1 text-black text-left">
+                        Language
+                    </label>
+                    <select
+                        value={language}
+                        onChange={(e) => setLanguage(e.target.value)}
+                        className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
+                    >
                     <option value="auto">Auto-detect</option>
                     <option value="javascript">JavaScript</option>
                     <option value="python">Python</option>
@@ -151,19 +151,19 @@ const CodeBlockModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", eleme
                 </div>
 
                 <div className="mb-2 mx-2">
-                  <label className="block text-xs font-medium mb-1 text-black text-left">
-                      Font Size
-                  </label>
-                  <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      step="0.1"
-                      value={fontSize}
-                      onChange={(e) => setFontSize(Number(e.target.value))}
-                      className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
-                      placeholder="1em"
-                  />
+                    <label className="block text-xs font-medium mb-1 text-black text-left">
+                        Font Size
+                    </label>
+                    <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        value={fontSize}
+                        onChange={(e) => setFontSize(Number(e.target.value))}
+                        className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
+                        placeholder="1em"
+                    />
                 </div>
 
                 <div className="mb-2 mx-2">

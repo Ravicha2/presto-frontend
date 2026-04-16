@@ -7,6 +7,9 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
   const [textHeight, setTextHeight] = useState(() => mode === "edit" && element ? (element.height ?? 10) : 10);
   const [text, setText] = useState(() => mode === "edit" && element ? (element.text ?? "") : "");
   const [fontSize, setFontSize] = useState(() => mode === "edit" && element ? (element.fontSize ?? 2) : 2);
+  const [fontFamily, setFontFamily] = useState(() =>
+    mode === "edit" && element ? (element.fontFamily ?? "Arial") : "Arial" 
+  );
   const [color, setColor] = useState(() => mode === "edit" && element ? (element.color ?? "#000000") : "#000000");
   const [error, setError] = useState("");
 
@@ -33,7 +36,8 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
           height: textHeight,
           text: text,
           fontSize: fontSize,
-          color: color
+          color: color,
+          fontFamily: fontFamily
         },
         layer
       );
@@ -44,6 +48,7 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
         text: text,
         fontSize: fontSize,
         color: color,
+        fontFamily: fontFamily
       };
       onSuccess(updatedElement);
     }
@@ -104,6 +109,20 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
                   className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
                   placeholder="2em"
                 />
+              </div>
+              <div className="mb-2 mx-2">
+                <label className="block text-xs font-medium mb-1 text-black text-left">
+                  Font Family
+                </label>
+                <select
+                  value={fontFamily}
+                  onChange={(e) => setFontFamily(e.target.value)}
+                  className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500 bg-white"
+                >
+                  <option value="Arial">Arial</option>
+                  <option value="Georgia">Georgia</option>
+                  <option value="Courier New">Courier New</option>
+                </select>
               </div>
               <div className="mb-2 mx-2">
                 <label className="block text-xs font-medium mb-1 text-black text-left">Text Colour</label>
