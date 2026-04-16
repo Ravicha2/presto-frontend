@@ -1,6 +1,8 @@
 import { ELEMENT_TYPES } from "../utils/elementFactory";
 import { useState } from 'react';
 import { Rnd } from 'react-rnd';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
 
 const getYouTubeId = (url) => {
   const patterns = [
@@ -126,18 +128,32 @@ const SlideElement = ({
     }
 
     if (element.type === ELEMENT_TYPES.CODE) {
+      const lang = element.language || 'javascript';
+      let highlighted;
+      try {
+        highlighted = hljs.highlight(element.code, { language: lang }).value;
+      } catch {
+        highlighted = hljs.highlightAuto(element.code, ['javascript', 'python', 'c']).value;
+      }
       return (
-        <pre className="no-drag" style={{
-          backgroundColor: '#1e1e1e',
-          color: '#d4d4d4',
-          fontFamily: 'monospace',
+        <pre style={{
+          backgroundColor: 'transparent',
+          color: '#1e1e1e',
           padding: '8px',
           width: '100%',
           height: '100%',
           overflow: 'auto',
-          margin: 0
+          margin: 0,
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-word',
+          userSelect: 'none',
+          pointerEvents: 'none'
         }}>
-          <code>{element.code}</code>
+          <code
+            className={`hljs language-${lang}`}
+            style={{ fontSize: `${element.fontSize}em` }}
+            dangerouslySetInnerHTML={{ __html: highlighted }}
+          />
         </pre>
       );
     }

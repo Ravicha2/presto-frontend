@@ -5,6 +5,7 @@ import UpsertSlideModal from './UpsertSlideModal';
 import ConfirmPopup from './ConfirmPopup';
 import AddSlideButton from './AddSlideButton';
 import SaveTextModal from './SaveTextModal';
+import CodeBlockModal from './CodeBlockModal';
 import SaveUploadModal from './SaveUploadModal';
 import DeleteSlideButton from './DeleteSlideButton';
 import uploadIcon from '../assets/cloud-computing-upload-svgrepo-com.svg';
@@ -16,6 +17,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteOpen, setIsDelteOpen] = useState(false);
   const [isAddTextOpen, setIsAddTextOpen] = useState(false);
+  const [isAddCodeOpen, setIsAddCodeOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
 
   // when presentation created, dispatch event so modal know that it need to be closed
@@ -74,7 +76,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
             <div className="flex flex-col items-center">
               <button
                 className="px-3 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
-                // onClick={() => setIsAddTextOpen(true)}
+                onClick={() => setIsAddCodeOpen(true)}
               >
                 <img className='w-7 h-7 brightness-0 invert-[1]' src={codeIcon}/>
               </button>
@@ -120,6 +122,12 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
           <SaveUploadModal
             isOpen={isUploadOpen}
             onClose={() => setIsUploadOpen(false)}
+            onSuccess={onAddElement}
+            layer={getCurrentLayer()}
+          />
+          <CodeBlockModal
+            isOpen={isAddCodeOpen}
+            onClose={() => setIsAddCodeOpen(false)}
             onSuccess={onAddElement}
             layer={getCurrentLayer()}
           />

@@ -40,6 +40,7 @@ export const createVideoElement = (params, layer) => ({
 export const createCodeElement = (params, layer) => ({
   ...createElement(ELEMENT_TYPES.CODE, params, layer),
   code: params.code,
+  fontSize: params.fontSize ?? 1,
   language: params.language ?? 'javascript'
 });
 
