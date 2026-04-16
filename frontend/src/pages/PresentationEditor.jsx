@@ -1,12 +1,15 @@
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import api from '../utils/api';
 import Toolbar from '../components/Toolbar';
 import UpsertSlideModal from '../components/UpsertSlideModal';
 import Alert from '../components/Alert';
 import SlideControlPanel from '../components/SlideControlPanel';
 import Canvas from '../components/Canvas';
+import RevisionHistoryModal from '../components/RevisionHistoryModal';
 import editIcon from '../assets/edit-button-svgrepo-com.svg';
+import revisionIcon from '../assets/history_7.svg'
 
 // presentation editor page
 const PresentationEditor = () => {
@@ -18,13 +21,16 @@ const PresentationEditor = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
 
+  const [revisions, setRevisions] = useState([]);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const lastRevisionTimeRef = useRef(null)
+  const saveQueueRef = useRef(Promise.resolve());
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   const slideParam = searchParams.get('slide');
   const currentSlideIndex = slideParam ? parseInt(slideParam, 10) : 0;
-  const currentSlideId = presentation?.slides?.[currentSlideIndex]?.id ?? null;
-
   const setCurrentSlideIndex = (index) => {
     setSearchParams({ slide: index.toString() });
   };
@@ -65,18 +71,21 @@ const PresentationEditor = () => {
   const isLastSlide =  currentSlideIndex === (presentation?.slides?.length ?? 0) -1;
   const slideCount = presentation?.slides.length ?? 0;
 
-  // save new state of presentation
-  const savePresentation = async (updatedPresentation) => {
-    try {
-      const { store } = await api.GET('/store');
-      const updatedPresentations = store.presentations.map(p => p.id === id ? updatedPresentation : p);
-      await api.PUT('/store', {
-        store: { ...store, presentations: updatedPresentations }
-      });
-    } catch (err) {
-      console.log(err);
-      setError('Failed to save changes');
-    }
+  // save new state of presentation (queued to prevent race conditions)
+  const savePresentation = (updatedPresentation) => {
+    saveQueueRef.current = saveQueueRef.current.then(async () => {
+      try {
+        const { store } = await api.GET('/store');
+        const updatedPresentations = store.presentations.map(p => p.id === id ? updatedPresentation : p);
+        await api.PUT('/store', {
+          store: { ...store, presentations: updatedPresentations }
+        });
+      } catch (err) {
+        console.log(err);
+        setError('Failed to save changes');
+      }
+    });
+    return saveQueueRef.current;
   };
 
   // shout out when presentation created
@@ -88,13 +97,14 @@ const PresentationEditor = () => {
   // add slide logic, create new empty slide
   const handleAddSlide = async () => {
     const newSlide = {
-      id: `slide-${Date.now()}`,
+      id: `slide-${uuidv4()}`,
       elements: [],
       background: "#ffffff",
     };
     
     const updatedSlides = [...(presentation.slides || []), newSlide];
     const updatedPresentation = { ...presentation, slides: updatedSlides };
+    captureRevision(presentation);
 
     setPresentation(updatedPresentation);
     setCurrentSlideIndex(updatedSlides.length - 1);
@@ -117,6 +127,7 @@ const PresentationEditor = () => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
       if (event.key === "ArrowLeft") {
         handlePrevSlide();
       }
@@ -144,21 +155,26 @@ const PresentationEditor = () => {
     const newSlideIndex = currentSlideIndex > 0 ? currentSlideIndex - 1: 0; 
 
     const updatedPresentation = { ...presentation, slides: updatedSlides };
+    captureRevision(presentation);
     setPresentation(updatedPresentation);
     setCurrentSlideIndex(newSlideIndex);
     await savePresentation(updatedPresentation);
   };
 
   // update element in a slide when element changed
-  const handleElementsChange = async (updatedElements) => {
-    const updatedSlides = presentation.slides.map(slide =>
-      slide.id === currentSlideId
-        ? { ...slide, elements: updatedElements }
-        : slide
-    );
-    const updatedPresentation = { ...presentation, slides: updatedSlides };
-    setPresentation(updatedPresentation);
-    await savePresentation(updatedPresentation);
+  const handleElementsChange = (updatedElements) => {
+    setPresentation((prev) => {
+      const slideId = prev.slides?.[currentSlideIndex]?.id;
+      const updatedSlides = prev.slides.map(slide =>
+        slide.id === slideId
+          ? { ...slide, elements: updatedElements }
+          : slide
+      );
+      const updatedPresentation = { ...prev, slides: updatedSlides };
+      captureRevision(prev);
+      savePresentation(updatedPresentation);
+      return updatedPresentation;
+    });
   };
 
   // add element in a slide when element craeted
@@ -171,9 +187,38 @@ const PresentationEditor = () => {
   }
 
   const handleReorderSlides = async (reorderSlides) => {
-    const updatePresentation = { ...presentation, slides: reorderSlides };
-    setPresentation(updatePresentation);
-    await savePresentation(updatePresentation);
+    const updatedPresentation = { ...presentation, slides: reorderSlides };
+    captureRevision(presentation);
+    setPresentation(updatedPresentation);
+    await savePresentation(updatedPresentation);
+  }
+
+  const captureRevision = (presentation) => {
+    const now = Date.now();
+    if (lastRevisionTimeRef.current === null || now - lastRevisionTimeRef.current >= 60000) {
+      lastRevisionTimeRef.current = now;
+      setRevisions((versions) => [
+        ...versions,
+        {
+          id: `rev-${now}`,
+          timestamp: new Date().toISOString(),
+          slides: JSON.parse(JSON.stringify(presentation.slides)),
+          slideCount: presentation.slides.length,
+        },
+      ]);
+    }
+  };
+
+  const handleRestoreRevision = async (revision) => {
+    const updatedPresentation = {
+      ...presentation,
+      slides: JSON.parse(JSON.stringify(revision.slides)),
+    };
+    const clampedIndex = Math.min(currentSlideIndex, revision.slides.length - 1);
+    setPresentation(updatedPresentation);
+    setCurrentSlideIndex(clampedIndex);
+    await savePresentation(updatedPresentation);
+    setIsHistoryOpen(false);
   }
 
   if (loading) return <div>Loading...</div>;
@@ -206,10 +251,28 @@ const PresentationEditor = () => {
               />
             </button>
           </div>
-          <div className="text-sm text-white">
-            {slideCount} Slides
+          <div className="flex flex-row items-center">
+            <button 
+              className='mx-3 px-3 py-1 border-1 border-white rounded-md text-white flex items-center bg-transparent hover:bg-sky-600 hover:shadow-xl'
+              onClick={() => setIsHistoryOpen(true)}
+            >
+              History 
+              <img
+                className='w-5 h-5 invert brightness-0 invert-[1] ml-2 hover:color-sky-500'
+                src={revisionIcon} alt="revision"
+              />
+            </button>
+            <div className="text-sm text-white">
+              {slideCount} Slides
+            </div>
           </div>
         </div>
+        <RevisionHistoryModal
+          isOpen={isHistoryOpen}
+          onClose={() => setIsHistoryOpen(false)}
+          revisions={revisions}
+          onRestore={handleRestoreRevision}
+        />
         <div className={`flex-grow flex justify-center items-center bg-gray-300 overflow-hidden min-h-0 transition-all duration-300 ${isPanelOpen ? 'p-10' : 'p-8'}`}>
           <button
             onClick={handlePrevSlide}

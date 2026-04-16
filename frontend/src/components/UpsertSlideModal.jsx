@@ -88,7 +88,7 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
       await api.PUT('/store', { store: updateStore });
       onSuccess(editedPresentation)
       onClose();
-    } catch (_error) {
+    } catch {
       setError('Failed to save presentation, Please try again.')
     } finally {
       setLoading(false)

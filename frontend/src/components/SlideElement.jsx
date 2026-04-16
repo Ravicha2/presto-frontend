@@ -36,6 +36,7 @@ const SlideElement = ({
   onContextMenu, 
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   // convert % to px
   const x = (element.x / 100) * canvasWidth;
@@ -51,6 +52,7 @@ const SlideElement = ({
 
   // calculate new position after drag
   const handleDragStop = (e, d) => {
+    setIsDragging(false);
     const maxX = canvasWidth - width;
     const maxY = canvasHeight - height;
     const clampedX = Math.max(0, Math.min(d.x, maxX));
@@ -113,15 +115,27 @@ const SlideElement = ({
             className="no-drag"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            style={{ width: '100%', height: '100%', overflow: 'hidden' }}
+            style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative' }}
           >
             <iframe
-              style={{ width: '100%', height: '100%', border: 'none' }}
+              style={{ width: '100%', height: '100%', border: 'none', pointerEvents: isDragging ? 'none' : 'auto' }}
               src={`https://www.youtube.com/embed/${youtubeId}?autoplay=${element.autoplay ? 1 : 0}`}
               title="YouTube video"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
+            {isDragging && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  zIndex: 1,
+                }}
+              />
+            )}
           </div>
         );
       }
@@ -191,6 +205,7 @@ const SlideElement = ({
           ? ((isSelected || isHovered) ? "7px solid #ccc" : "7px solid transparent")
           : ((isSelected || isHovered) ? "1px solid #ccc" : "1px solid transparent")),
       }}
+      onDragStart={() => setIsDragging(true)}
       onDragStop={handleDragStop}
       onResizeStop={handleResizeStop}
       onMouseDown={(e) => onMouseDown?.(e)}

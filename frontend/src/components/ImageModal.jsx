@@ -53,7 +53,7 @@ const Uploadimage = ({ onClose, onError, mode="add" ,onSuccess, layer, element }
         onSuccess(newElement);
       }
       handleClose();
-    } catch (_err) {
+    } catch {
       handleError('Failed to process Image');
     }
   };
