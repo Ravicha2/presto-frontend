@@ -21,10 +21,9 @@ const PresentationEditor = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
 
-  const [revisions, setRevisions] = useState([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const lastRevisionTimeRef = useRef(null)
   const saveQueueRef = useRef(Promise.resolve());
+  const lastRevisionTimeRef = useRef(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -101,10 +100,10 @@ const PresentationEditor = () => {
       elements: [],
       background: "#ffffff",
     };
-    
+
+    const withRevision = captureRevision(presentation);
     const updatedSlides = [...(presentation.slides || []), newSlide];
-    const updatedPresentation = { ...presentation, slides: updatedSlides };
-    captureRevision(presentation);
+    const updatedPresentation = { ...withRevision, slides: updatedSlides };
 
     setPresentation(updatedPresentation);
     setCurrentSlideIndex(updatedSlides.length - 1);
@@ -151,11 +150,11 @@ const PresentationEditor = () => {
       return;
     }
 
+    const withRevision = captureRevision(presentation);
     const updatedSlides = presentation.slides.filter((_, index) => index !== currentSlideIndex);
-    const newSlideIndex = currentSlideIndex > 0 ? currentSlideIndex - 1: 0; 
+    const newSlideIndex = currentSlideIndex > 0 ? currentSlideIndex - 1: 0;
 
-    const updatedPresentation = { ...presentation, slides: updatedSlides };
-    captureRevision(presentation);
+    const updatedPresentation = { ...withRevision, slides: updatedSlides };
     setPresentation(updatedPresentation);
     setCurrentSlideIndex(newSlideIndex);
     await savePresentation(updatedPresentation);
@@ -170,8 +169,8 @@ const PresentationEditor = () => {
           ? { ...slide, elements: updatedElements }
           : slide
       );
-      const updatedPresentation = { ...prev, slides: updatedSlides };
-      captureRevision(prev);
+      const withRevision = captureRevision(prev);
+      const updatedPresentation = { ...withRevision, slides: updatedSlides };
       savePresentation(updatedPresentation);
       return updatedPresentation;
     });
@@ -187,26 +186,29 @@ const PresentationEditor = () => {
   }
 
   const handleReorderSlides = async (reorderSlides) => {
-    const updatedPresentation = { ...presentation, slides: reorderSlides };
-    captureRevision(presentation);
+    const withRevision = captureRevision(presentation);
+    const updatedPresentation = { ...withRevision, slides: reorderSlides };
     setPresentation(updatedPresentation);
     await savePresentation(updatedPresentation);
   }
+
+  const MAX_REVISIONS = 15;
 
   const captureRevision = (presentation) => {
     const now = Date.now();
     if (lastRevisionTimeRef.current === null || now - lastRevisionTimeRef.current >= 60000) {
       lastRevisionTimeRef.current = now;
-      setRevisions((versions) => [
-        ...versions,
-        {
-          id: `rev-${now}`,
-          timestamp: new Date().toISOString(),
-          slides: JSON.parse(JSON.stringify(presentation.slides)),
-          slideCount: presentation.slides.length,
-        },
-      ]);
+      const newRevision = {
+        id: `rev-${now}`,
+        timestamp: new Date().toISOString(),
+        slides: JSON.parse(JSON.stringify(presentation.slides)),
+        slideCount: presentation.slides.length,
+      };
+      const existingRevisions = presentation.revisions || [];
+      const updatedRevisions = [...existingRevisions, newRevision].slice(-MAX_REVISIONS);
+      return { ...presentation, revisions: updatedRevisions };
     }
+    return presentation;
   };
 
   const handleRestoreRevision = async (revision) => {
@@ -219,7 +221,7 @@ const PresentationEditor = () => {
     setCurrentSlideIndex(clampedIndex);
     await savePresentation(updatedPresentation);
     setIsHistoryOpen(false);
-  }
+  };
 
   if (loading) return <div>Loading...</div>;
   if (!presentation) return <div>Presentation not found</div>;
@@ -270,7 +272,7 @@ const PresentationEditor = () => {
         <RevisionHistoryModal
           isOpen={isHistoryOpen}
           onClose={() => setIsHistoryOpen(false)}
-          revisions={revisions}
+          revisions={presentation.revisions || []}
           onRestore={handleRestoreRevision}
         />
         <div className={`flex-grow flex justify-center items-center bg-gray-300 overflow-hidden min-h-0 transition-all duration-300 ${isPanelOpen ? 'p-10' : 'p-8'}`}>
