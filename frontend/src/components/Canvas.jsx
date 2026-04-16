@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import SlideElement from "./SlideElement";
 import ContextMenu from "./ContextMenu";
 import SaveTextModal from "./SaveTextModal";
+import CodeBlockModal from "./CodeBlockModal";
 import Uploadimage from "./ImageModal";
 import UploadVideo from "./VideoModal";
 import { ELEMENT_TYPES } from "../utils/elementFactory";
@@ -130,6 +131,16 @@ const Canvas = ({
           element={editingElement}
         />
       );
+    case ELEMENT_TYPES.CODE:
+      return (
+        <CodeBlockModal
+          isOpen={true}
+          onClose={handleCloseEditModal}
+          onSuccess={handleEditSuccess}
+          mode="edit"
+          element={editingElement}
+        />
+      )
     case ELEMENT_TYPES.IMAGE:
       return (
         <>
