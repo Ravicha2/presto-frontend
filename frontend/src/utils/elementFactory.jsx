@@ -23,6 +23,7 @@ export const createTextElement = (params, layer) => ({
   text: params.text ?? '',
   fontSize: params.fontSize ?? 1,
   color: params.color ?? '#000000',
+  fontFamily: params.fontFamily ?? 'Arial',
 });
 
 export const createImageElement = (params, layer) => ({
