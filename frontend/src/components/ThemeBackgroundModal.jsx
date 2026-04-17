@@ -8,7 +8,7 @@ const ThemeBackgroundModal = ({ isOpen, onClose, onApply }) => {
     const [gradientDirection, setGradientDirection] = useState("to bottom");
     const [imageUrl, setImageUrl] = useState("");
     const [imageMode, setImageMode] = useState("url");
-    const [uploadImage, setUploadImage] = useState("");
+    const [uploadedImage, setUploadedImage] = useState("");
 
     const handleApply = () => {
         let backgroundSettings;
@@ -28,22 +28,29 @@ const ThemeBackgroundModal = ({ isOpen, onClose, onApply }) => {
         } else {
             backgroundSettings = {
                 type: "image",
-                imageUrl: imageUrl,
+                imageUrl: imageMode === "upload" ? uploadedImage : imageUrl,
             }
         }
 
         onApply(backgroundSettings);
+        resetImageState(); 
         onClose();
     }
+
+    const resetImageState = () => {
+        setImageUrl("");
+        setImageMode("url");
+        setUploadedImage("");
+    };
 
     const handleImageUpload = (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
-
+        
         const reader = new FileReader();
 
         reader.onloadend = () => {
-            setUploadImage(reader.result);
+            setUploadedImage(reader.result);
         }
 
         reader.readAsDataURL(file);
@@ -160,22 +167,22 @@ const ThemeBackgroundModal = ({ isOpen, onClose, onApply }) => {
                         <div className="mb-2 mx-2">
                         <div className="flex justify-around border border-gray-300 rounded">
                             <button
-                            type="button"
-                            className={`w-full py-1 text-sm ${
-                                imageMode === "url" ? "bg-blue-500 text-white" : "bg-transparent text-black"
-                            }`}
-                            onClick={() => setImageMode("url")}
-                            >
-                            URL
+                                type="button"
+                                className={`w-full py-1 text-sm ${
+                                    imageMode === "url" ? "bg-blue-500 text-white" : "bg-transparent text-black"
+                                }`}
+                                onClick={() => setImageMode("url")}
+                                >
+                                URL
                             </button>
                             <button
-                            type="button"
-                            className={`w-full py-1 text-sm ${
-                                imageMode === "upload" ? "bg-blue-500 text-white" : "bg-transparent text-black"
-                            }`}
-                            onClick={() => setImageMode("upload")}
-                            >
-                            Upload
+                                type="button"
+                                className={`w-full py-1 text-sm ${
+                                    imageMode === "upload" ? "bg-blue-500 text-white" : "bg-transparent text-black"
+                                }`}
+                                onClick={() => setImageMode("upload")}
+                                >
+                                Upload
                             </button>
                         </div>
                         </div>
@@ -194,22 +201,40 @@ const ThemeBackgroundModal = ({ isOpen, onClose, onApply }) => {
                             />
                         </div>
                         ) : (
-                        <div className="mb-2 mx-2">
+                            <div className="mb-2 mx-2">
                             <label className="block text-xs font-medium mb-1 text-black text-left">
-                            Upload Image
+                              Upload Image
                             </label>
+                          
                             <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500 bg-white"
+                              id="background-image-upload"
+                              type="file"
+                              accept="image/*"
+                              onChange={handleImageUpload}
+                              className="hidden"
                             />
-                            {uploadedImage && (
-                            <p className="text-xs text-green-600 mt-2">
-                                Image uploaded successfully
-                            </p>
-                            )}
-                        </div>
+                          
+                            <label
+                              htmlFor="background-image-upload"
+                              className="w-full h-28 border border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition"
+                            >
+                              {uploadedImage ? (
+                                <>
+                                  <img
+                                    src={uploadedImage}
+                                    alt="Uploaded preview"
+                                    className="w-10 h-10 object-contain mb-2"
+                                  />
+                                  <p className="text-xs text-green-600">Image selected</p>
+                                </>
+                              ) : (
+                                <>
+                                  <span className="text-3xl mb-2">🖼️</span>
+                                  <p className="text-sm text-gray-500">Click to select image</p>
+                                </>
+                              )}
+                            </label>
+                          </div>
                         )}
                     </>
                     )}
