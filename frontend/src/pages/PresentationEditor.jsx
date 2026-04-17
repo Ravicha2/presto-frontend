@@ -20,6 +20,11 @@ const PresentationEditor = () => {
   const [presentation, setPresentation] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
+  const [themeBackground, setThemeBackground] = useState(null);
+
+  const handleApplyThemeBackground = (backgroundSettings) => {
+    setThemeBackground(backgroundSettings);
+  }
 
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const saveQueueRef = useRef(Promise.resolve());
@@ -33,6 +38,8 @@ const PresentationEditor = () => {
   const setCurrentSlideIndex = (index) => {
     setSearchParams({ slide: index.toString() });
   };
+
+
 
   // get current presentation params
   useEffect(() => {
@@ -235,6 +242,7 @@ const PresentationEditor = () => {
           onAddElement={handleAddElement}
           getCurrentLayer={getCurrentLayer}
           onDeleteSlide={handleDeleteSlide}
+          onApplyThemeBackground={handleApplyThemeBackground}
         />
         <div className="flex flex-row justify-between items-center px-6 py-3 h-14 bg-linear-to-t to-sky-500 from-sky-500">
           <div className="flex items-center gap-2 mx-2">
@@ -288,6 +296,7 @@ const PresentationEditor = () => {
               <Canvas
                 elements={currentSlide.elements || []}
                 onElementsChange={handleElementsChange}
+                themeBackground={themeBackground}
               />
             )}
             <p className="text-gray-500 bottom-2 left-2 absolute">{currentSlideIndex + 1}</p>

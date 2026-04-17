@@ -14,7 +14,7 @@ import ThemeBackgroundButton from './ThemeBackgroundButton';
 import backgroundIcon from '../assets/background-icon.svg';
 import ThemeBackgroundModal from './ThemeBackgroundModal';
 
-const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) => {
+const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide, onApplyThemeBackground }) => {
   const location = useLocation();
   const isDashboard = location.pathname === '/dashboard';
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,10 +27,6 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
   // when presentation created, dispatch event so modal know that it need to be closed
   const handleCreateSuccess = (newPresentation) => {
     window.dispatchEvent(new CustomEvent('presentationCreated', { detail: newPresentation }));
-  }
-
-  const handleApplyThemeBackground = (backgroundSettings) => {
-    console.log(backgroundSettings);
   }
 
   return (
@@ -151,7 +147,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
           <ThemeBackgroundModal
             isOpen={IsThemeModalOpen}
             onClose={() => setIsThemeModalOpen(false)}
-            onApply={handleApplyThemeBackground}
+            onApply={onApplyThemeBackground}
           />
         </>
       )}
