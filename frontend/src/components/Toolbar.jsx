@@ -10,6 +10,8 @@ import SaveUploadModal from './SaveUploadModal';
 import DeleteSlideButton from './DeleteSlideButton';
 import uploadIcon from '../assets/cloud-computing-upload-svgrepo-com.svg';
 import codeIcon from '../assets/code-svgrepo-com.svg';
+import ThemeBackgroundButton from './ThemeBackgroundButton';
+import backgroundIcon from '../assets/background-icon.svg';
 
 const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) => {
   const location = useLocation();
@@ -19,6 +21,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
   const [isAddTextOpen, setIsAddTextOpen] = useState(false);
   const [isAddCodeOpen, setIsAddCodeOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [IsThemeModalOpen, setIsThemeModalOpen] = useState(false);
 
   // when presentation created, dispatch event so modal know that it need to be closed
   const handleCreateSuccess = (newPresentation) => {
@@ -60,7 +63,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                 className="px-5 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
                 onClick={() => setIsAddTextOpen(true)}
               >
-                                T
+                T
               </button>
               <p className="text-white">Add Text</p>
             </div>
@@ -81,6 +84,15 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
                 <img className='w-7 h-7 brightness-0 invert-[1]' src={codeIcon}/>
               </button>
               <p className="text-white">Add Code</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <button
+                className="px-3 py-3 rounded-full bg-blue-500 text-white mt-3 text-xl hover:bg-blue-700 font-serif"
+                onClick={() => setIsThemeModalOpen(true)}
+              >
+                <img className='w-7 h-7 brightness-0 invert-[1]' src={backgroundIcon}/>
+              </button>
+              <p className="text-white">Set Theme</p>
             </div>
           </>
         )
