@@ -11,6 +11,7 @@ const Canvas = ({
   elements = [],
   onElementsChange,
   className = '',
+  themeBackground
 }) => {
   const [selectedElementId, setSelectedElementId] = useState(null);
   const [editingElement, setEditingElement] = useState(null);
@@ -197,6 +198,25 @@ const Canvas = ({
     }
   };
 
+  const canvasBackgroundStyle =
+    themeBackground?.type === "color"
+      ? {
+        backgroundColor: themeBackground.color,
+      }
+      : themeBackground?.type === "gradient"
+      ? {
+        background: `linear-gradient(${themeBackground.direction}, ${themeBackground.from}, ${themeBackground.to})`,
+      }
+      : themeBackground?.type === "image"
+      ? {
+        backgroundImage: `url(${themeBackground.imageUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }
+      : {};
+
+
   if (canvasWidth === 0 || canvasHeight === 0) {
     return (
       <div
@@ -211,6 +231,7 @@ const Canvas = ({
       <div
         ref={canvasRef}
         className={`relative w-full h-full ${className}`}
+        style={canvasBackgroundStyle}
         onClick={handleCanvasClick}
         onContextMenu={(e) => e.preventDefault()}
       >
