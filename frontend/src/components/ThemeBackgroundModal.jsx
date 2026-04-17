@@ -7,6 +7,8 @@ const ThemeBackgroundModal = ({ isOpen, onClose, onApply }) => {
     const [gradientTo, setGradientTo] = useState("#cbd5e1");
     const [gradientDirection, setGradientDirection] = useState("to bottom");
     const [imageUrl, setImageUrl] = useState("");
+    const [imageMode, setImageMode] = useState("url");
+    const [uploadImage, setUploadImage] = useState("");
 
     const handleApply = () => {
         let backgroundSettings;
@@ -32,6 +34,19 @@ const ThemeBackgroundModal = ({ isOpen, onClose, onApply }) => {
 
         onApply(backgroundSettings);
         onClose();
+    }
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setUploadImage(reader.result);
+        }
+
+        reader.readAsDataURL(file);
     }
 
     if (!isOpen) return null;
@@ -141,18 +156,62 @@ const ThemeBackgroundModal = ({ isOpen, onClose, onApply }) => {
                     )}
 
                     {backgroundType === "image" && (
+                    <>
                         <div className="mb-2 mx-2">
-                        <label className="block text-xs font-medium mb-1 text-black text-left">
+                        <div className="flex justify-around border border-gray-300 rounded">
+                            <button
+                            type="button"
+                            className={`w-full py-1 text-sm ${
+                                imageMode === "url" ? "bg-blue-500 text-white" : "bg-transparent text-black"
+                            }`}
+                            onClick={() => setImageMode("url")}
+                            >
+                            URL
+                            </button>
+                            <button
+                            type="button"
+                            className={`w-full py-1 text-sm ${
+                                imageMode === "upload" ? "bg-blue-500 text-white" : "bg-transparent text-black"
+                            }`}
+                            onClick={() => setImageMode("upload")}
+                            >
+                            Upload
+                            </button>
+                        </div>
+                        </div>
+
+                        {imageMode === "url" ? (
+                        <div className="mb-2 mx-2">
+                            <label className="block text-xs font-medium mb-1 text-black text-left">
                             Image URL
-                        </label>
-                        <input
+                            </label>
+                            <input
                             type="text"
                             value={imageUrl}
                             onChange={(e) => setImageUrl(e.target.value)}
                             className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
                             placeholder="Paste image URL here"
-                        />
+                            />
                         </div>
+                        ) : (
+                        <div className="mb-2 mx-2">
+                            <label className="block text-xs font-medium mb-1 text-black text-left">
+                            Upload Image
+                            </label>
+                            <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500 bg-white"
+                            />
+                            {uploadedImage && (
+                            <p className="text-xs text-green-600 mt-2">
+                                Image uploaded successfully
+                            </p>
+                            )}
+                        </div>
+                        )}
+                    </>
                     )}
 
                     <div className="flex justify-end gap-2 ml-2 mt-4">
