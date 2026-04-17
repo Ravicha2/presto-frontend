@@ -29,6 +29,10 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
     window.dispatchEvent(new CustomEvent('presentationCreated', { detail: newPresentation }));
   }
 
+  const handleApplyThemeBackground = (backgroundSettings) => {
+    console.log(backgroundSettings);
+  }
+
   return (
     <>
       <aside className='fixed left-0 top-0 h-full w-25 flex flex-col items-center justify-between py-4 gap-4 bg-linear-to-t to-sky-500 from-gray-300'>
@@ -147,8 +151,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
           <ThemeBackgroundModal
             isOpen={IsThemeModalOpen}
             onClose={() => setIsThemeModalOpen(false)}
-            onSuccess={onAddElement}
-            layer={getCurrentLayer()}
+            onApply={handleApplyThemeBackground}
           />
         </>
       )}
