@@ -12,6 +12,7 @@ import uploadIcon from '../assets/cloud-computing-upload-svgrepo-com.svg';
 import codeIcon from '../assets/code-svgrepo-com.svg';
 import ThemeBackgroundButton from './ThemeBackgroundButton';
 import backgroundIcon from '../assets/background-icon.svg';
+import ThemeBackgroundModal from './ThemeBackgroundModal';
 
 const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) => {
   const location = useLocation();
@@ -140,6 +141,12 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide }) =
           <CodeBlockModal
             isOpen={isAddCodeOpen}
             onClose={() => setIsAddCodeOpen(false)}
+            onSuccess={onAddElement}
+            layer={getCurrentLayer()}
+          />
+          <ThemeBackgroundModal
+            isOpen={IsThemeModalOpen}
+            onClose={() => setIsThemeModalOpen(false)}
             onSuccess={onAddElement}
             layer={getCurrentLayer()}
           />
