@@ -53,24 +53,19 @@ describe('Revision History Flow', () => {
   it('captures a revision after making an edit', () => {
     goToEditor();
 
-    // Mock Date so the 60s revision throttle passes instantly
     cy.clock(Date.now(), ['Date']);
 
-    // Add a text element to trigger captureRevision
     cy.get('aside button').contains('T').click();
     cy.contains('New Text').should('be.visible');
     cy.get('textarea[placeholder="Your text goes here"]').type('First edit');
     cy.contains('button', 'create').click();
     cy.contains('First edit').should('be.visible');
 
-    // Fast-forward past the 60s throttle
     cy.tick(61000);
 
-    // Make another edit to trigger a new revision capture
     cy.get('aside button').contains('+').click();
     cy.wait(1000);
 
-    // Open revision history — should show at least one entry
     cy.contains('button', 'History').click();
     cy.contains('Revision History').should('be.visible');
     cy.get('ul li').should('have.length.at.least', 1);
@@ -85,7 +80,6 @@ describe('Revision History Flow', () => {
 
     cy.clock(Date.now(), ['Date']);
 
-    // Add a text element to capture an initial revision
     cy.get('aside button').contains('T').click();
     cy.contains('New Text').should('be.visible');
     cy.get('textarea[placeholder="Your text goes here"]').type('Version A');
@@ -106,7 +100,6 @@ describe('Revision History Flow', () => {
     // Restore the oldest revision (last in the sorted list)
     cy.get('ul li').last().find('button').contains('Restore').click();
 
-    // Modal should close after restore
     cy.contains('Revision History').should('not.exist');
 
     cy.clock().then((clock) => clock.restore());
