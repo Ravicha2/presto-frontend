@@ -271,6 +271,7 @@ const PresentationEditor = () => {
             <img
               className="w-10 h-10 rounded bg-gray-200"
               src={presentation.thumbnail || null}
+              alt="Presentation thumbnail"
             />
             <h1 className="text-lg font-semibold">{presentation.name}</h1>
             <button
