@@ -6,6 +6,7 @@ import Toolbar from '../components/Toolbar';
 import UpsertSlideModal from '../components/UpsertSlideModal';
 import Alert from '../components/Alert';
 import SlideControlPanel from '../components/SlideControlPanel';
+import ConfirmPopup from '../components/ConfirmPopup';
 import Canvas from '../components/Canvas';
 import RevisionHistoryModal from '../components/RevisionHistoryModal';
 import editIcon from '../assets/edit-button-svgrepo-com.svg';
@@ -22,6 +23,7 @@ const PresentationEditor = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   const [themeBackground, setThemeBackground] = useState(null);
+  const [isDeleteOpen, setIsDelteOpen] = useState(false);
 
   const handleApplyThemeBackground = async (backgroundSettings) => {
     setThemeBackground(backgroundSettings);
@@ -258,7 +260,7 @@ const PresentationEditor = () => {
   return (
     <>
       <Alert type="error" message={error} onClose={() => setError('')} />
-      <div className="h-screen flex flex-col ml-20 bg-white text-white">
+      <div className="h-screen flex flex-col ml-16 md:ml-20 bg-white text-white">
         <Toolbar
           onAddSlide={handleAddSlide}
           onAddElement={handleAddElement}
@@ -268,11 +270,14 @@ const PresentationEditor = () => {
         />
         <div className="flex flex-row justify-between items-center px-6 py-3 h-14 bg-linear-to-t to-sky-500 from-sky-500">
           <div className="flex items-center gap-2 mx-2">
-            <img
-              className="w-10 h-10 rounded bg-gray-200"
-              src={presentation.thumbnail || null}
-              alt="Presentation thumbnail"
-            />
+            {presentation.thumbnail 
+              ? <img
+                  className="w-10 h-10 rounded"
+                  src={presentation.thumbnail || null}
+                  alt="Presentation thumbnail"
+                />
+              : <div className="w-10 h-10 rounded bg-gray-200"></div>
+            }
             <h1 className="text-lg font-semibold">{presentation.name}</h1>
             <button
               onClick={() => setIsModalOpen(true)}
@@ -284,7 +289,7 @@ const PresentationEditor = () => {
               />
             </button>
           </div>
-          <div className="flex flex-row items-center">
+          <div className="flex flex-row items-center justify-center">
             <PreviewButton onPreview={handlePreview} />
 
             <button 
@@ -297,9 +302,12 @@ const PresentationEditor = () => {
                 src={revisionIcon} alt="revision"
               />
             </button>
-            <div className="text-sm text-white">
-              {slideCount} Slides
-            </div>
+            <button 
+              className="m-3 px-3 py-1 rounded hover:bg-blue-500 text-white mb-3 border-1 border-white"
+              onClick={() => setIsDelteOpen(true)}
+            >
+              🗑️
+            </button>
           </div>
         </div>
         <RevisionHistoryModal
@@ -348,6 +356,10 @@ const PresentationEditor = () => {
         presentationToEdit={presentation}
         onClose={() => setIsModalOpen(false)}
         onSuccess={handleCreateSuccess}
+      />
+      <ConfirmPopup
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDelteOpen(false)}
       />
     </>
   );
