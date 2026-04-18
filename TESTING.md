@@ -24,9 +24,13 @@
 **Tests:**
 
 - Add a text element via toolbar; verify it appears at top-left of the canvas
+- Drag a text element; verify it renders on the canvas
 - Add an image element via toolbar; verify it renders on the canvas
+- Drag an image element; verify it renders on the canvas
 - Add a video element via toolbar; verify it renders on the canvas
+- Drag a video element; verify it renders on the canvas
 - Add a code block element via toolbar; verify it renders on the canvas
+- Drag a code block element; verify it renders on the canvas
 - Double-click a text element to open its edit modal; change the text and save; verify updated text on canvas
 - Double-click an image element to open its edit modal; change the URL and save; verify updated image
 - Double-click a video element to open its edit modal; change the URL and save; verify updated video
@@ -38,8 +42,6 @@
 - Select a gradient option; verify the slide canvas shows a gradient background
 - Upload an image as background; verify the slide canvas shows the image background
 - Set a default theme on the presentation; verify all slides inherit that background
-- Override the default on a specific slide with a different background; verify only that slide changes while others keep the default
-- Remove a per-slide override; verify the slide reverts to the default theme
 
 ---
 

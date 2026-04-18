@@ -66,13 +66,15 @@ describe('Happy Path', () => {
     cy.contains('My Test Presentation').click();
     cy.url().should('match', /\/presentation\//);
     cy.contains('My Test Presentation').should('be.visible');
+
     cy.get('img[alt="Edit"]').click();
 
-
     cy.get('input[placeholder="Enter presentation name"]').clear().type('Updated Presentation');
+    cy.get('input[type="file"]').selectFile('cypress/fixtures/dummyImg.png', { force: true })
     cy.contains('button', 'Save Changes').click();
 
     cy.contains('Updated Presentation').should('be.visible');
+    cy.get('img[alt="Presentation thumbnail"]').should('be.visible');
   });
 
   it('Add slides in a slideshow deck', () => {
