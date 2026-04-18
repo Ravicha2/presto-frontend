@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 describe('Happy Path', () => {
   const uniqueEmail = `test_happy_${Date.now()}@example.com`;
   const password = 'Password1234';
@@ -133,7 +134,7 @@ describe('Happy Path', () => {
     cy.contains('button', 'Logout').click();
     cy.url().should('eq', Cypress.config().baseUrl + '/');
     cy.window().then((win) => {
-      expect(win.localStorage.getItem('token')).to.be.null;
+      cy.wrap(win.localStorage.getItem('token')).should('be.null');
     });
   });
 
@@ -144,7 +145,7 @@ describe('Happy Path', () => {
     cy.get('input[type="password"]').type('{enter}');
     cy.url().should('include', '/dashboard');
     cy.window().then((win) => {
-      expect(win.localStorage.getItem('token')).to.not.be.null;
+      cy.wrap(win.localStorage.getItem('token')).should('not.be.null');
     });
   });
 
