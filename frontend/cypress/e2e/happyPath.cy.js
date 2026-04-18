@@ -115,13 +115,13 @@ describe('Happy Path', () => {
     cy.contains('Updated Presentation').click();
     cy.url().should('match', /\/presentation\//);
 
-    cy.get('aside button').contains('🗑️').click();
+    cy.get('button').contains('🗑️').click();
     cy.contains('Are you sure?').should('be.visible');
 
     cy.contains('button', 'No').click();
     cy.contains('Are you sure?').should('not.exist');
     cy.url().should('match', /\/presentation\//);
-    cy.get('aside button').contains('🗑️').click();
+    cy.get('button').contains('🗑️').click();
     cy.contains('button', 'Yes').click();
 
     cy.url().should('include', '/dashboard');
