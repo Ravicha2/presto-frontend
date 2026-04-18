@@ -1,1 +1,57 @@
 @import "tailwindcss";
+
+.slide-in-right {
+    animation: slideInRight 0.3s ease forwards;
+    z-index: 2;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.3s ease forwards;
+    z-index: 2;
+}
+
+.slide-out-left {
+    animation: slideOutLeft 0.3s ease forwards;
+    z-index: 1;
+}
+
+.slide-out-right {
+    animation: slideOutRight 0.3s ease forwards;
+    z-index: 1;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
