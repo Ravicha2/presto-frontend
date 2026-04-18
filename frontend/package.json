@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "tsc": "tsc -b --noEmit",
     "preview": "vite preview",
+    "test": "cypress open",
     "test:headless": "cypress run",
     "cypress:open": "cypress open"
   },
