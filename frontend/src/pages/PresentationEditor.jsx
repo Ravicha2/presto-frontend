@@ -23,9 +23,20 @@ const PresentationEditor = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   const [themeBackground, setThemeBackground] = useState(null);
 
-  const handleApplyThemeBackground = (backgroundSettings) => {
+  const handleApplyThemeBackground = async (backgroundSettings) => {
     setThemeBackground(backgroundSettings);
-  }
+  
+    const withRevision = captureRevision(presentation);
+    const updatedSlides = presentation.slides.map((slide, index) =>
+      index === currentSlideIndex
+        ? { ...slide, background: backgroundSettings }
+        : slide
+    );
+  
+    const updatedPresentation = { ...withRevision, slides: updatedSlides };
+    setPresentation(updatedPresentation);
+    await savePresentation(updatedPresentation);
+  };
 
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const saveQueueRef = useRef(Promise.resolve());
@@ -36,6 +47,7 @@ const PresentationEditor = () => {
 
   const slideParam = searchParams.get('slide');
   const currentSlideIndex = slideParam ? parseInt(slideParam, 10) : 0;
+
   const setCurrentSlideIndex = (index) => {
     setSearchParams({ slide: index.toString() });
   };
@@ -74,6 +86,10 @@ const PresentationEditor = () => {
 
   const currentSlide = presentation?.slides?.[currentSlideIndex] ?? null;
 
+  useEffect(() => {
+    setThemeBackground(currentSlide?.background || null);
+  }, [currentSlide]);
+
   const isFirstSlide = currentSlideIndex === 0;
   const isLastSlide =  currentSlideIndex === (presentation?.slides?.length ?? 0) -1;
   const slideCount = presentation?.slides.length ?? 0;
@@ -106,7 +122,7 @@ const PresentationEditor = () => {
     const newSlide = {
       id: `slide-${uuidv4()}`,
       elements: [],
-      background: "#ffffff",
+      background: { type: "color", color: "#ffffff" },
     };
 
     const withRevision = captureRevision(presentation);

@@ -105,6 +105,7 @@ const PresentationPreview = () => {
                 elements={slide.elements || []}
                 onElementsChange={() => {}}
                 previewMode={true}
+                themeBackground={slide.background || null}
             />
             </div>
         );
