@@ -13,6 +13,19 @@ const getYouTubeId = (url) => {
   return null;
 };
 
+const backgroundToStyle = (bg) => {
+  if (!bg) return { backgroundColor: '#ffffff' };
+  if (bg.type === 'color') return { backgroundColor: bg.color };
+  if (bg.type === 'gradient') return { background: `linear-gradient(${bg.direction}, ${bg.from}, ${bg.to})` };
+  if (bg.type === 'image') return {
+    backgroundImage: `url(${bg.imageUrl})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  };
+  return { backgroundColor: '#ffffff' };
+};
+
 const renderMiniElement = (element) => {
   const style = {
     position: 'absolute',
@@ -82,7 +95,7 @@ const renderMiniElement = (element) => {
 const SlidePreview = ({ slide, className = '' }) => {
   return (
     <div className={`w-full h-full relative overflow-hidden ${className}`}
-      style={{ background: slide.background || '#ffffff' }}>
+      style={backgroundToStyle(slide.background)}>
       {(slide.elements || [])
         .sort((a,b) => (a.layer || 0) - (b.layer || 0))
         .map(renderMiniElement)}

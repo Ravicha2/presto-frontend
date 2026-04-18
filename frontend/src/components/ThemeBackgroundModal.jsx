@@ -9,8 +9,9 @@ const ThemeBackgroundModal = ({ isOpen, onClose, onApply }) => {
     const [imageUrl, setImageUrl] = useState("");
     const [imageMode, setImageMode] = useState("url");
     const [uploadedImage, setUploadedImage] = useState("");
+    const [targetScope, setTargetScope] = useState("current");
 
-    const handleApply = () => {
+    const handleApply = async () => {
         let backgroundSettings;
 
         if (backgroundType === "color") {
@@ -32,7 +33,10 @@ const ThemeBackgroundModal = ({ isOpen, onClose, onApply }) => {
             }
         }
 
-        onApply(backgroundSettings);
+        await onApply({
+            scope: targetScope,
+            background: backgroundSettings,
+        });
         resetImageState(); 
         onClose();
     }
@@ -74,7 +78,18 @@ const ThemeBackgroundModal = ({ isOpen, onClose, onApply }) => {
                     <form>
                     <div className="mb-2 mx-2">
                         <label className="block text-xs font-medium mb-1 text-black text-left">
-                        Background Type
+                            Apply To
+                        </label>
+                        <select
+                            value={targetScope}
+                            onChange={(e) => setTargetScope(e.target.value)}
+                            className="w-full border text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-gray-500"
+                        >
+                            <option value="current">Current Slide Background</option>
+                            <option value="default">Default Background</option>
+                        </select>
+                        <label className="block text-xs font-medium mb-1 mt-2 text-black text-left">
+                            Background Type
                         </label>
                         <select
                             value={backgroundType}
