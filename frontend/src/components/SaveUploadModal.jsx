@@ -21,7 +21,7 @@ const SaveUploadModal = ({ isOpen, onClose, onSuccess, layer }) => {
     <>
       <Alert type="error" message={error} onClose={() => setError('')} />
       <div className="fixed inset-0 z-40" onClick={handleClose} />
-      <div className="fixed left-25 top-13 h-full w-90 z-50 shadow-lg rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
+      <div className="fixed inset-x-0 top-0 md:left-25 md:top-13 md:inset-x-auto md:h-full md:w-90 h-full w-full md:max-w-90 z-50 shadow-lg rounded-md bg-white overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="w-full max-w-xl p-2">
           <div className="flex justify-around border border-gray-300 rounded">
             <button 

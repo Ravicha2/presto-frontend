@@ -100,7 +100,7 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
     <>
       <Alert type="error" message={error} onClose={() => setError('')} />
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-25" onClick={onClose}>
-        <div className="bg-gray-200 rounded-lg p-6 w-full max-w-xl shadow-xl z-50" onClick={(e) => e.stopPropagation()}>  
+        <div className="bg-gray-200 rounded-lg p-4 md:p-6 w-11/12 md:w-full max-w-xl shadow-xl z-50 mx-auto" onClick={(e) => e.stopPropagation()}>  
           <h1 className="text-xl font-semibold mb-4 text-black">{isEditing ? "Edit Presentation": "New Presentation"}</h1>
           <form onSubmit={handleSave}>
             <div className="mb-4">

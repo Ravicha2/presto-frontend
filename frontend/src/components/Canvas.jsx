@@ -162,7 +162,7 @@ const Canvas = ({
       return (
         <>
           <div className="fixed inset-0 z-[9998]" onClick={handleCloseEditModal} />
-          <div className="fixed left-25 top-13 h-full w-90 z-[9999] shadow-lg rounded-md bg-white" onClick={(e) => e.stopPropagation}>
+          <div className="fixed inset-x-0 top-0 md:left-25 md:top-13 md:inset-x-auto md:h-full md:w-90 h-full w-full md:max-w-90 z-[9999] shadow-lg rounded-md bg-white overflow-y-auto" onClick={(e) => e.stopPropagation}>
             <div className="w-full max-w-xl p-2">
               <h1 className="text-xl font-semibold mb-2 text-black">Edit Image</h1>
               <Uploadimage
@@ -180,7 +180,7 @@ const Canvas = ({
       return (
         <>
           <div className="fixed inset-0 z-[9998]" onClick={handleCloseEditModal} />
-          <div className="fixed left-25 top-13 h-full w-90 z-[9999] shadow-lg rounded-md bg-white" onClick={(e) => e.stopPropagation}>
+          <div className="fixed inset-x-0 top-0 md:left-25 md:top-13 md:inset-x-auto md:h-full md:w-90 h-full w-full md:max-w-90 z-[9999] shadow-lg rounded-md bg-white overflow-y-auto" onClick={(e) => e.stopPropagation}>
             <div className="w-full max-w-xl p-2">
               <h1 className="text-xl font-semibold mb-2 text-black">Edit Video</h1>
               <UploadVideo

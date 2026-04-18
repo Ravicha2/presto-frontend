@@ -49,7 +49,7 @@ const ConfirmDeletePopup = ({ isOpen, onClose }) => {
     <>
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <Alert type="error" message={error} onClose={() => setError('')} />
-        <div className="bg-white p-6 rounded-lg flex flex-col items-center">
+        <div className="bg-white p-4 md:p-6 rounded-lg flex flex-col items-center w-11/12 max-w-sm mx-auto">
           <h3 className='text-black font-bold'>Are you sure?</h3>
           <p className='text-black mb-10'> {presentation.name} will permanently deleted</p>
           <div className='flex flex-row'>

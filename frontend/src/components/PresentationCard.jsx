@@ -7,7 +7,7 @@ const PresentationCard = ({ presentation }) => {
   return (
     <div
       onClick={() => navigate(`/presentation/${id}`)}
-      className="cursor-pointer min-w-[100px] w-[200px]"
+      className="cursor-pointer w-[160px] md:w-[200px]"
     >
       <div
         className="bg-gray-300 rounded-lg overflow-hidden flex flex-row p-2"
