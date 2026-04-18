@@ -40,7 +40,7 @@ const SlideControlPanel = ({ slides, currentSlideIndex, setCurrentSlideIndex, sl
   };
 
   return (
-    <div className="relative pl-4 md:pl-10 md:pb-0">
+    <div className="relative z-[1] pl-4 md:pl-10 md:pb-0">
       <div className="flex flex-col pt-1 justify-center items-center">
         <button
           onClick={togglePanel}
@@ -54,8 +54,8 @@ const SlideControlPanel = ({ slides, currentSlideIndex, setCurrentSlideIndex, sl
         </button>
         {isOpen && (
           <div className='flex items-center w-full'>
-            <div 
-              className='absolute inset-0'
+            <div
+              className='absolute inset-0 z-[1]'
               onClick={togglePanel}
             />
             <div className='relative w-full bg-white shadow-2xl animate-slide-up'>
