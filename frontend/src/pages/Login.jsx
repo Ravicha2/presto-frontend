@@ -43,7 +43,7 @@ const Login = () => {
           placeholder="example@email.com"
           className="border rounded px-4 py-2 mb-3"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value.toLowerCase())}
         />
         <p>Password</p>
         <input
