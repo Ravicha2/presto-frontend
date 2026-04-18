@@ -10,6 +10,7 @@ import Canvas from '../components/Canvas';
 import RevisionHistoryModal from '../components/RevisionHistoryModal';
 import editIcon from '../assets/edit-button-svgrepo-com.svg';
 import revisionIcon from '../assets/history_7.svg'
+import PreviewButton from '../components/PreviewButton';
 
 // presentation editor page
 const PresentationEditor = () => {
@@ -230,6 +231,11 @@ const PresentationEditor = () => {
     setIsHistoryOpen(false);
   };
 
+  const handlePreview = () => {
+    const url = `/presentation/${id}/preview?slide=${currentSlideIndex}`;
+    window.open(url, '_blank');
+  }
+
   if (loading) return <div>Loading...</div>;
   if (!presentation) return <div>Presentation not found</div>;
 
@@ -262,6 +268,8 @@ const PresentationEditor = () => {
             </button>
           </div>
           <div className="flex flex-row items-center">
+            <PreviewButton onPreview={handlePreview} />
+
             <button 
               className='mx-3 px-3 py-1 border-1 border-white rounded-md text-white flex items-center bg-transparent hover:bg-sky-600 hover:shadow-xl'
               onClick={() => setIsHistoryOpen(true)}

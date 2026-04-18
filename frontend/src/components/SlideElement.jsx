@@ -28,6 +28,7 @@ const SlideElement = ({
   isSelected,
   canvasWidth,
   canvasHeight,
+  previewMode = false,
   onDragStop,
   onResizeStop,
   onMouseDown,
@@ -180,16 +181,23 @@ const SlideElement = ({
       bounds="parent"
       minWidth={minWidth}
       minHeight={minHeight}
-      enableResizing={isSelected ? {
-        top: false,
-        right: false,
-        bottom: false,
-        left: false,
-        topRight: true,
-        bottomRight: true,
-        bottomLeft: true,
-        topLeft: true,
-      }: false}
+      disableDragging={previewMode}
+      enableResizing={
+        previewMode
+          ? false
+          : isSelected
+            ? {
+                top: false,
+                right: false,
+                bottom: false,
+                left: false,
+                topRight: true,
+                bottomRight: true,
+                bottomLeft: true,
+                topLeft: true,
+              }
+            : false
+      }
       resizeHandleStyles={{
         topLeft: CORNER_HANDLE_STYLE,
         topRight: CORNER_HANDLE_STYLE,
@@ -199,9 +207,13 @@ const SlideElement = ({
       cancel=".no-drag"
       style={{
         zIndex: element.layer,
-        border: (element.type === ELEMENT_TYPES.VIDEO 
-          ? ((isSelected || isHovered) ? "7px solid #ccc" : "7px solid transparent")
-          : ((isSelected || isHovered) ? "1px solid #ccc" : "1px solid transparent")),
+        border: previewMode
+          ? "none"
+          : (
+              element.type === ELEMENT_TYPES.VIDEO
+                ? ((isSelected || isHovered) ? "7px solid #ccc" : "7px solid transparent")
+                : ((isSelected || isHovered) ? "1px solid #ccc" : "1px solid transparent")
+            ),
       }}
       onDragStart={() => setIsDragging(true)}
       onDragStop={handleDragStop}
@@ -209,16 +221,22 @@ const SlideElement = ({
       onMouseDown={(e) => onMouseDown?.(e)}
       onClick={(e) => {
         e.stopPropagation();
-        onClick?.(e);
+        if (!previewMode) {
+          onClick?.(e);
+        }
       }}
       onDoubleClick={(e) => {
         e.stopPropagation();
-        onDoubleClick?.(e);
+        if (!previewMode) {
+          onDoubleClick?.(e);
+        }
       }}
       onContextMenu={(e) => {
         e.stopPropagation();
         e.preventDefault();
-        onContextMenu?.(e);
+        if (!previewMode) {
+          onContextMenu?.(e);
+        }
       }}
     >
       {renderContent()}
