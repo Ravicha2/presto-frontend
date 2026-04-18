@@ -5,4 +5,5 @@
 *dist
 *package-lock.json
 # backend
+presto-backend
 review.md
