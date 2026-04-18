@@ -165,7 +165,7 @@ const SlideElement = ({
         }}>
           <code
             className={`hljs language-${lang}`}
-            style={{ fontSize: `${element.fontSize}%`, background: 'transparent' }}
+            style={{ fontSize: `${element.fontSize}em`, background: 'transparent' }}
             dangerouslySetInnerHTML={{ __html: highlighted }}
           />
         </pre>

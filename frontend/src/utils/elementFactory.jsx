@@ -35,7 +35,7 @@ export const createImageElement = (params, layer) => ({
 export const createVideoElement = (params, layer) => ({
   ...createElement(ELEMENT_TYPES.VIDEO, params, layer),
   src: params.src,
-  autoplay: params.autoplay ?? false,
+  autoplay: params.autoplay ?? true,
 });
 
 export const createCodeElement = (params, layer) => ({
@@ -63,7 +63,7 @@ export const DEFAULT_VALUES = {
     width: 60,                                                                          
     height: 45,                                                                         
     src: '',                                                                            
-    autoplay: false,                                                                                                                                         
+    autoplay: true,                                                                                                                                         
   },                                                                                      
   [ELEMENT_TYPES.CODE]: {                                                                 
     width: 60,                                                                          

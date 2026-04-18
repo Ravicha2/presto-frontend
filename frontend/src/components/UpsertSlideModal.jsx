@@ -74,7 +74,7 @@ const SaveSlideModal = ({ isOpen, onClose, onSuccess, presentationToEdit=null}) 
           slides: [{
             id: `slide-${Date.now()}`,
             elements: [],
-            background: "#ffffff",
+            background: { type: "color", color: "#ffffff" },
           }],
         };
         updatedPresentations = [...presentations, newPresentation];

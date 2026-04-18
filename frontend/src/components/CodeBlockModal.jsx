@@ -57,10 +57,10 @@ const CodeBlockModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", eleme
         : language;
       const newElement = createCodeElement(
         {
-          width: `${codeWidth}%`,
-          height: `${codeHeight}%`,
+          width: codeWidth,
+          height: codeHeight,
           code: code,
-          fontSize: `${fontSize}%`,
+          fontSize: fontSize,
           language: resolvedLanguage,
         }, layer);
       onSuccess(newElement);
@@ -70,10 +70,10 @@ const CodeBlockModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", eleme
         : language);
       const updatedElement = {
         ...element,
-        width: `${codeWidth}%`,
-        height: `${codeHeight}%`,
+        width: codeWidth,
+        height: codeHeight,
         code: code,
-        fontSize: `${fontSize}%`,
+        fontSize: fontSize,
         language: resolvedLanguage,
       };
       onSuccess(updatedElement);

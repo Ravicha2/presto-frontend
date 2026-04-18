@@ -7,6 +7,7 @@ import SaveTextModal from './SaveTextModal';
 import CodeBlockModal from './CodeBlockModal';
 import SaveUploadModal from './SaveUploadModal';
 import DeleteSlideButton from './DeleteSlideButton';
+import homeIcon from '../assets/home.svg'
 import uploadIcon from '../assets/cloud-computing-upload-svgrepo-com.svg';
 import codeIcon from '../assets/code-svgrepo-com.svg';
 import backgroundIcon from '../assets/background-icon.svg';
@@ -32,7 +33,7 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide, onA
         {/* top left logo */}
         <div className="flex flex-col items-center">
           <Link to="/dashboard" className="text-sm md:text-xl font-bold text-white mb-2 md:mb-4 mx-auto">
-            Presto
+            {isDashboard ? 'Presto' : <img className="w-7 h-7 brightness-0 invert-[1]" src={homeIcon}/> }
           </Link>
           {/* if dashboard, render add presentation button. else render the slide tools */}
           {isDashboard && (
