@@ -11,7 +11,8 @@ const Canvas = ({
   elements = [],
   onElementsChange,
   className = '',
-  themeBackground
+  themeBackground,
+  previewMode = false,
 }) => {
   const [selectedElementId, setSelectedElementId] = useState(null);
   const [editingElement, setEditingElement] = useState(null);
@@ -243,6 +244,7 @@ const Canvas = ({
             isSelected={element.id === selectedElementId}
             canvasWidth={canvasWidth}
             canvasHeight={canvasHeight}
+            previewMode={previewMode}
             onDragStop={(pos) => handleDragStop(element.id, pos)}
             onResizeStop={(size) => handleResizeStop(element.id, size)}
             onMouseDown={() => bringToFront(element.id)}
