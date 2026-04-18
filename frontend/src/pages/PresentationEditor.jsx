@@ -25,20 +25,52 @@ const PresentationEditor = () => {
   const [themeBackground, setThemeBackground] = useState(null);
   const [isDeleteOpen, setIsDelteOpen] = useState(false);
 
-  const handleApplyThemeBackground = async (backgroundSettings) => {
-    setThemeBackground(backgroundSettings);
-  
+  const handleApplyThemeBackground = async ({ scope, background }) => {
     const withRevision = captureRevision(presentation);
-    const updatedSlides = presentation.slides.map((slide, index) =>
-      index === currentSlideIndex
-        ? { ...slide, background: backgroundSettings }
-        : slide
-    );
+
+    if (scope == "current") {
+      setThemeBackground(background);
   
-    const updatedPresentation = { ...withRevision, slides: updatedSlides };
-    setPresentation(updatedPresentation);
-    await savePresentation(updatedPresentation);
-  };
+      const updatedSlides = presentation.slides.map((slide, index) =>
+        index === currentSlideIndex
+          ? { ...slide, background }
+          : slide
+      );
+    
+      const updatedPresentation = { ...withRevision, slides: updatedSlides };
+      setPresentation(updatedPresentation);
+      await savePresentation(updatedPresentation);
+
+      return;
+    }
+
+    if (scope === "default") {
+      const previousDefault = presentation.defaultBackground || {
+        type: "color",
+        color: "#ffffff",
+      };
+
+      const updatedSlides = presentation.slides.map((slide) => {
+        const isUsingDefault =
+          !slide.background ||
+          JSON.stringify(slide.background) === JSON.stringify(previousDefault);
+
+        return isUsingDefault
+          ? { ...slide, background }
+          : slide;
+      });
+
+      const updatedPresentation = {
+        ...withRevision,
+        defaultBackground: background,
+        slides: updatedSlides,
+      };
+
+      setPresentation(updatedPresentation);
+      setThemeBackground(updatedSlides[currentSlideIndex]?.background || null);
+      await savePresentation(updatedPresentation);
+    }
+  }
 
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const saveQueueRef = useRef(Promise.resolve());
@@ -124,7 +156,7 @@ const PresentationEditor = () => {
     const newSlide = {
       id: `slide-${uuidv4()}`,
       elements: [],
-      background: { type: "color", color: "#ffffff" },
+      background: presentation.defaultBackground || { type: "color", color: "#ffffff" },
     };
 
     const withRevision = captureRevision(presentation);
