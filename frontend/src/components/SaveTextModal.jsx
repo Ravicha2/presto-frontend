@@ -70,7 +70,7 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
           </h1>
           <form onSubmit={handleSubmit}>
             {!isEditMode && (
-              <div className="flex flex-row justify-between">
+              <div className="flex flex-col md:flex-row justify-between">
                 <div className="mb-2 mx-2">
                   <label className="block text-xs font-medium mb-1 text-black text-left">Box Width</label>
                   <input
@@ -97,7 +97,7 @@ const SaveTextModal = ({ isOpen, onClose, onSuccess, layer, mode = "add", elemen
                 </div>
               </div>
             )}
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-col md:flex-row justify-between">
               <div className="mb-2 mx-2">
                 <label className="block text-xs text-xs font-medium mb-1 text-black text-left">Font Size</label>
                 <input

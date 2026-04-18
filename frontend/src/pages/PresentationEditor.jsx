@@ -285,7 +285,7 @@ const PresentationEditor = () => {
   return (
     <>
       <Alert type="error" message={error} onClose={() => setError('')} />
-      <div className="h-screen flex flex-col md:ml-20 bg-white text-white">
+      <div className="h-screen flex flex-col md:ml-25 pb-16 md:pb-0 bg-white text-white">
         <Toolbar
           onAddSlide={handleAddSlide}
           onAddElement={handleAddElement}
@@ -293,7 +293,7 @@ const PresentationEditor = () => {
           onDeleteSlide={handleDeleteSlide}
           onApplyThemeBackground={handleApplyThemeBackground}
         />
-        <div className="flex flex-row justify-between items-center px-3 md:px-6 py-2 md:py-3 pt-14 md:pt-3 min-h-14 bg-linear-to-t to-sky-500 from-sky-500">
+        <div className="flex flex-row justify-between items-center px-3 md:px-6 py-2 md:py-3 min-h-14 bg-linear-to-t to-sky-500 from-sky-500">
           <div className="flex items-center gap-2 mx-1 md:mx-2 min-w-0">
             {presentation.thumbnail
               ? <img

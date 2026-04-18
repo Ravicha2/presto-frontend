@@ -20,9 +20,9 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className='min-h-screen flex flex-col md:ml-20 bg-linear-to-t to-sky-500 from-gray-300'>
+    <div className='min-h-screen flex flex-col md:ml-25 pb-16 md:pb-0 bg-linear-to-t to-sky-500 from-gray-300'>
       <Toolbar />
-      <div className="flex flex-col p-4 pt-16 md:pt-4 w-full items-center">
+      <div className="flex flex-col p-4 w-full items-center">
         <h3 className="text-2xl md:text-4xl font-bold my-5 text-white">Your presentations</h3>
         <div
           className="gap-4 flex flex-wrap justify-center"

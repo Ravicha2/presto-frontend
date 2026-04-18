@@ -40,7 +40,7 @@ const SlideControlPanel = ({ slides, currentSlideIndex, setCurrentSlideIndex, sl
   };
 
   return (
-    <div className="relative pl-4 md:pl-10">
+    <div className="relative pl-4 md:pl-10 md:pb-0">
       <div className="flex flex-col pt-1 justify-center items-center">
         <button
           onClick={togglePanel}
