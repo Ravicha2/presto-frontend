@@ -1,4 +1,5 @@
 
+/* eslint-disable no-undef */
 describe('Slide Content & Customization Path', () => {
   const uniqueEmail = `test_editor_${Date.now()}@example.com`;
   const password = 'Password1234';
@@ -202,7 +203,7 @@ describe('Slide Content & Customization Path', () => {
     goToEditor();
     cy.get('aside p').contains('Set Theme').parent().find('button').click();
     cy.contains('Theme & Background').should('be.visible');
-    cy.get('select').first().select('gradient');
+    cy.get('select').eq(1).select('gradient');
     cy.contains('Gradient Direction').should('be.visible');
     cy.contains('button', 'Apply').click();
     cy.get('.shadow-2xl.aspect-video > .relative').should('have.css', 'background-image').and('include', 'linear-gradient');
@@ -212,7 +213,7 @@ describe('Slide Content & Customization Path', () => {
     goToEditor();
     cy.get('aside p').contains('Set Theme').parent().find('button').click();
     cy.contains('Theme & Background').should('be.visible');
-    cy.get('select').first().select('image');
+    cy.get('select').eq(1).select('image');
     cy.contains('URL').should('be.visible');
     cy.get('input[placeholder="Paste image URL here"]').type('https://picsum.photos/800/600');
     cy.contains('button', 'Apply').click();

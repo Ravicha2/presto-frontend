@@ -205,17 +205,17 @@ const Canvas = ({
         backgroundColor: themeBackground.color,
       }
       : themeBackground?.type === "gradient"
-      ? {
-        background: `linear-gradient(${themeBackground.direction}, ${themeBackground.from}, ${themeBackground.to})`,
-      }
-      : themeBackground?.type === "image"
-      ? {
-        backgroundImage: `url(${themeBackground.imageUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }
-      : {};
+        ? {
+          background: `linear-gradient(${themeBackground.direction}, ${themeBackground.from}, ${themeBackground.to})`,
+        }
+        : themeBackground?.type === "image"
+          ? {
+            backgroundImage: `url(${themeBackground.imageUrl})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }
+          : {};
 
 
   if (canvasWidth === 0 || canvasHeight === 0) {

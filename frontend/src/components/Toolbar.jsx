@@ -9,7 +9,6 @@ import SaveUploadModal from './SaveUploadModal';
 import DeleteSlideButton from './DeleteSlideButton';
 import uploadIcon from '../assets/cloud-computing-upload-svgrepo-com.svg';
 import codeIcon from '../assets/code-svgrepo-com.svg';
-import ThemeBackgroundButton from './ThemeBackgroundButton';
 import backgroundIcon from '../assets/background-icon.svg';
 import ThemeBackgroundModal from './ThemeBackgroundModal';
 
@@ -17,7 +16,6 @@ const Toolbar = ({ onAddSlide, onAddElement, getCurrentLayer, onDeleteSlide, onA
   const location = useLocation();
   const isDashboard = location.pathname === '/dashboard';
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteOpen, setIsDelteOpen] = useState(false);
   const [isAddTextOpen, setIsAddTextOpen] = useState(false);
   const [isAddCodeOpen, setIsAddCodeOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);

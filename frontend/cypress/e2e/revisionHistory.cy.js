@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 describe('Revision History Flow', () => {
   const uniqueEmail = `test_rev_${Date.now()}@example.com`;
   const password = 'Password1234';

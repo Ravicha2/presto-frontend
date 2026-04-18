@@ -22,21 +22,18 @@ const PresentationEditor = () => {
   const [presentation, setPresentation] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
-  const [themeBackground, setThemeBackground] = useState(null);
   const [isDeleteOpen, setIsDelteOpen] = useState(false);
 
   const handleApplyThemeBackground = async ({ scope, background }) => {
     const withRevision = captureRevision(presentation);
 
     if (scope == "current") {
-      setThemeBackground(background);
-  
       const updatedSlides = presentation.slides.map((slide, index) =>
         index === currentSlideIndex
           ? { ...slide, background }
           : slide
       );
-    
+
       const updatedPresentation = { ...withRevision, slides: updatedSlides };
       setPresentation(updatedPresentation);
       await savePresentation(updatedPresentation);
@@ -67,7 +64,6 @@ const PresentationEditor = () => {
       };
 
       setPresentation(updatedPresentation);
-      setThemeBackground(updatedSlides[currentSlideIndex]?.background || null);
       await savePresentation(updatedPresentation);
     }
   }
@@ -119,10 +115,7 @@ const PresentationEditor = () => {
   }, [presentation, currentSlideIndex, setSearchParams]);
 
   const currentSlide = presentation?.slides?.[currentSlideIndex] ?? null;
-
-  useEffect(() => {
-    setThemeBackground(currentSlide?.background || null);
-  }, [currentSlide]);
+  const themeBackground = currentSlide?.background || null;
 
   const isFirstSlide = currentSlideIndex === 0;
   const isLastSlide =  currentSlideIndex === (presentation?.slides?.length ?? 0) -1;
@@ -304,10 +297,10 @@ const PresentationEditor = () => {
           <div className="flex items-center gap-2 mx-2">
             {presentation.thumbnail 
               ? <img
-                  className="w-10 h-10 rounded"
-                  src={presentation.thumbnail || null}
-                  alt="Presentation thumbnail"
-                />
+                className="w-10 h-10 rounded"
+                src={presentation.thumbnail || null}
+                alt="Presentation thumbnail"
+              />
               : <div className="w-10 h-10 rounded bg-gray-200"></div>
             }
             <h1 className="text-lg font-semibold">{presentation.name}</h1>

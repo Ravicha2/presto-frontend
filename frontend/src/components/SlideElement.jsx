@@ -188,15 +188,15 @@ const SlideElement = ({
           ? false
           : isSelected
             ? {
-                top: false,
-                right: false,
-                bottom: false,
-                left: false,
-                topRight: true,
-                bottomRight: true,
-                bottomLeft: true,
-                topLeft: true,
-              }
+              top: false,
+              right: false,
+              bottom: false,
+              left: false,
+              topRight: true,
+              bottomRight: true,
+              bottomLeft: true,
+              topLeft: true,
+            }
             : false
       }
       resizeHandleStyles={{
@@ -211,10 +211,10 @@ const SlideElement = ({
         border: previewMode
           ? "none"
           : (
-              element.type === ELEMENT_TYPES.VIDEO
-                ? ((isSelected || isHovered) ? "7px solid #ccc" : "7px solid transparent")
-                : ((isSelected || isHovered) ? "1px solid #ccc" : "1px solid transparent")
-            ),
+            element.type === ELEMENT_TYPES.VIDEO
+              ? ((isSelected || isHovered) ? "7px solid #ccc" : "7px solid transparent")
+              : ((isSelected || isHovered) ? "1px solid #ccc" : "1px solid transparent")
+          ),
       }}
       onDragStart={() => setIsDragging(true)}
       onDragStop={handleDragStop}
