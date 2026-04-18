@@ -14,6 +14,8 @@ const PresentationPreview = () => {
     const slideParam = searchParams.get('slide');
     const currentSlideIndex = slideParam ? parseInt(slideParam, 10) : 0;
 
+    const [transition, setTransition] = useState(null);
+
     useEffect(() => {
         const fetchPresentation = async () => {
         try {
@@ -65,15 +67,47 @@ const PresentationPreview = () => {
     const isLastSlide = currentSlideIndex === slideCount - 1;
 
     const handlePrevSlide = () => {
-        if (!isFirstSlide) {
+        if (isFirstSlide || transition) return;
+        
+        setTransition({
+            from: currentSlideIndex,
+            to: currentSlideIndex - 1,
+            direction: "prev",
+        });
+        
+        setTimeout(() => {
             setCurrentSlideIndex(currentSlideIndex - 1);
-        }
+            setTransition(null);
+        }, 300);
+        };
+        
+        const handleNextSlide = () => {
+        if (isLastSlide || transition) return;
+        
+        setTransition({
+            from: currentSlideIndex,
+            to: currentSlideIndex + 1,
+            direction: "next",
+        });
+        
+        setTimeout(() => {
+            setCurrentSlideIndex(currentSlideIndex + 1);
+            setTransition(null);
+        }, 300);
     };
 
-    const handleNextSlide = () => {
-        if (!isLastSlide) {
-            setCurrentSlideIndex(currentSlideIndex + 1);
-        }
+    const renderSlide = (slide, extraClass = "") => {
+        if (!slide) return null;
+        
+        return (
+            <div className={`absolute inset-0 ${extraClass}`}>
+            <Canvas
+                elements={slide.elements || []}
+                onElementsChange={() => {}}
+                previewMode={true}
+            />
+            </div>
+        );
     };
 
     return (
@@ -104,17 +138,30 @@ const PresentationPreview = () => {
                 </button>
             </div>
 
-            <div className="w-full h-full flex items-center justify-center bg-gray-900">
-                <div className="w-full h-full relative bg-white">
-                    {currentSlide && (
-                        <Canvas
-                            elements={currentSlide.elements || []}
-                            onElementsChange={() => {}}
-                            previewMode={true}
-                        />
+            <div className="w-full h-full flex items-center justify-center bg-gray-900 overflow-hidden">
+                <div className="w-full h-full relative bg-white overflow-hidden">
+                    {!transition && currentSlide && renderSlide(currentSlide)}
+
+                    {transition && (
+                    <>
+                        {renderSlide(
+                            slides[transition.from],
+                            transition.direction === "next"
+                                ? "slide-out-left"
+                                : "slide-out-right"
+                        )}
+
+                        {renderSlide(
+                            slides[transition.to],
+                            transition.direction === "next"
+                                ? "slide-in-right"
+                                : "slide-in-left"
+                        )}
+                    </>
                     )}
+
                     <p className="text-gray-500 bottom-4 left-4 absolute z-10">
-                        {currentSlideIndex + 1}
+                        {transition ? transition.to + 1 : currentSlideIndex + 1}
                     </p>
                 </div>
             </div>
