@@ -113,12 +113,12 @@ const PresentationPreview = () => {
 
   return (
     <div className="w-screen h-screen bg-gray-900 relative overflow-hidden">
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+      <div className="absolute top-2 right-2 md:top-4 md:right-4 z-20 flex items-center gap-1 md:gap-2">
         <button
           type="button"
           onClick={handlePrevSlide}
           disabled={isFirstSlide}
-          className="px-3 py-2 rounded bg-black/60 text-white disabled:opacity-40"
+          className="px-3 py-2 md:px-3 md:py-2 rounded bg-black/60 text-white disabled:opacity-40 text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center"
         >
                     ←
         </button>
@@ -126,14 +126,14 @@ const PresentationPreview = () => {
           type="button"
           onClick={handleNextSlide}
           disabled={isLastSlide}
-          className="px-3 py-2 rounded bg-black/60 text-white disabled:opacity-40"
+          className="px-3 py-2 md:px-3 md:py-2 rounded bg-black/60 text-white disabled:opacity-40 text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center"
         >
                     →
         </button>
         <button
           type="button"
           onClick={() => window.close()}
-          className="px-3 py-2 rounded bg-red-600 text-white"
+          className="px-3 py-2 md:px-3 md:py-2 rounded bg-red-600 text-white text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center"
         >
                     Exit
         </button>

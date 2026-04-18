@@ -44,13 +44,13 @@ const Register = () => {
   };
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center h-14 bg-linear-to-t from-sky-500 to-indigo-500'>
+    <div className='min-h-screen flex flex-col items-center justify-center bg-linear-to-t from-sky-500 to-indigo-500'>
       <Navbar />
       {error && (
         <Alert type="error" message={error} onClose={() => setError(null)} />
       )}
       <h1 className='text-2xl font-bold mb-4'>Register</h1>
-      <form className='flex flex-col gap-2 w-md' onSubmit={handleSubmit}>
+      <form className='flex flex-col gap-2 w-full max-w-md px-4' onSubmit={handleSubmit}>
         <p>Name</p>
         <input
           type="text"

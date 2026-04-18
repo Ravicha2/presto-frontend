@@ -285,7 +285,7 @@ const PresentationEditor = () => {
   return (
     <>
       <Alert type="error" message={error} onClose={() => setError('')} />
-      <div className="h-screen flex flex-col ml-16 md:ml-20 bg-white text-white">
+      <div className="h-screen flex flex-col md:ml-20 bg-white text-white">
         <Toolbar
           onAddSlide={handleAddSlide}
           onAddElement={handleAddElement}
@@ -293,17 +293,17 @@ const PresentationEditor = () => {
           onDeleteSlide={handleDeleteSlide}
           onApplyThemeBackground={handleApplyThemeBackground}
         />
-        <div className="flex flex-row justify-between items-center px-6 py-3 h-14 bg-linear-to-t to-sky-500 from-sky-500">
-          <div className="flex items-center gap-2 mx-2">
-            {presentation.thumbnail 
+        <div className="flex flex-row justify-between items-center px-3 md:px-6 py-2 md:py-3 pt-14 md:pt-3 min-h-14 bg-linear-to-t to-sky-500 from-sky-500">
+          <div className="flex items-center gap-2 mx-1 md:mx-2 min-w-0">
+            {presentation.thumbnail
               ? <img
-                className="w-10 h-10 rounded"
+                className="w-8 h-8 md:w-10 md:h-10 rounded flex-shrink-0"
                 src={presentation.thumbnail || null}
                 alt="Presentation thumbnail"
               />
-              : <div className="w-10 h-10 rounded bg-gray-200"></div>
+              : <div className="w-8 h-8 md:w-10 md:h-10 rounded bg-gray-200 flex-shrink-0"></div>
             }
-            <h1 className="text-lg font-semibold">{presentation.name}</h1>
+            <h1 className="text-sm md:text-lg font-semibold truncate">{presentation.name}</h1>
             <button
               onClick={() => setIsModalOpen(true)}
               className="cursor-pointer text-xl px-1 object-contain"
@@ -314,21 +314,21 @@ const PresentationEditor = () => {
               />
             </button>
           </div>
-          <div className="flex flex-row items-center justify-center">
+          <div className="flex flex-row items-center justify-center flex-shrink-0">
             <PreviewButton onPreview={handlePreview} />
 
-            <button 
-              className='mx-3 px-3 py-1 border-1 border-white rounded-md text-white flex items-center bg-transparent hover:bg-sky-600 hover:shadow-xl'
+            <button
+              className='mx-1 md:mx-3 px-2 md:px-3 py-1 border-1 border-white rounded-md text-white flex items-center bg-transparent hover:bg-sky-600 hover:shadow-xl text-sm md:text-base'
               onClick={() => setIsHistoryOpen(true)}
             >
-              History 
+              <span className="hidden md:inline">History</span>
               <img
-                className='w-5 h-5 invert brightness-0 invert-[1] ml-2 hover:color-sky-500'
+                className='w-4 h-4 md:w-5 md:h-5 invert brightness-0 invert-[1] md:ml-2 hover:color-sky-500'
                 src={revisionIcon} alt="revision"
               />
             </button>
-            <button 
-              className="m-3 px-3 py-1 rounded hover:bg-blue-500 text-white mb-3 border-1 border-white"
+            <button
+              className="m-1 md:m-3 px-2 md:px-3 py-1 rounded hover:bg-blue-500 text-white md:mb-3 border-1 border-white"
               onClick={() => setIsDelteOpen(true)}
             >
               🗑️
@@ -341,15 +341,15 @@ const PresentationEditor = () => {
           revisions={presentation.revisions || []}
           onRestore={handleRestoreRevision}
         />
-        <div className={`flex-grow flex justify-center items-center bg-gray-300 overflow-hidden min-h-0 transition-all duration-300 ${isPanelOpen ? 'p-10' : 'p-8'}`}>
+        <div className={`flex-grow flex justify-center items-center bg-gray-300 overflow-hidden min-h-0 transition-all duration-300 ${isPanelOpen ? 'p-2 md:p-10' : 'p-2 md:p-8'}`}>
           <button
             onClick={handlePrevSlide}
             disabled={isFirstSlide}
-            className={`mr-3 px-4 py-2 bg-blue-500 text-white rounded ${isFirstSlide ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'}`}
+            className={`mr-1 md:mr-3 px-2 md:px-4 py-2 bg-blue-500 text-white rounded text-sm md:text-base ${isFirstSlide ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'}`}
           >
                     ←
           </button>
-          <div className={`bg-white w-full aspect-video shadow-2xl flex items-center justify-center text-black relative z-10 ${isPanelOpen ? 'max-w-4xl' : 'max-w-5xl'}`}>
+          <div className={`bg-white w-full aspect-video shadow-2xl flex items-center justify-center text-black relative z-10 max-w-full ${isPanelOpen ? 'md:max-w-4xl' : 'md:max-w-5xl'}`}>
             {currentSlide && (
               <Canvas
                 elements={currentSlide.elements || []}
@@ -361,7 +361,7 @@ const PresentationEditor = () => {
           </div>
           <button
             onClick={handleNextSlide}
-            className={`ml-3 px-4 py-2 bg-blue-500 text-white rounded ${isLastSlide ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700'}`}
+            className={`ml-1 md:ml-3 px-2 md:px-4 py-2 bg-blue-500 text-white rounded text-sm md:text-base ${isLastSlide ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700'}`}
           >
                     →
           </button>
