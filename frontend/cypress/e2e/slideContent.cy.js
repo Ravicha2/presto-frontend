@@ -33,7 +33,7 @@ describe('Slide Content & Customization Path', () => {
     login();
     cy.visit('/dashboard');
 
-    cy.get('aside button').contains('+').click();
+    cy.get('aside:visible button').contains('+').click();
     cy.get('input[placeholder="Enter presentation name"]').type('Editor Test Deck');
     cy.contains('button', 'Create').click();
 
@@ -44,7 +44,7 @@ describe('Slide Content & Customization Path', () => {
 
   it('adds and drags a text element', () => {
     goToEditor();
-    cy.get('aside button').contains('T').click();
+    cy.get('aside:visible button').contains('T').click();
 
     cy.contains('New Text').should('be.visible');
     cy.get('textarea[placeholder="Your text goes here"]').type('Hello Cypress Test');

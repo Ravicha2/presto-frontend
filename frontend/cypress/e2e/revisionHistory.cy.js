@@ -15,7 +15,7 @@ describe('Revision History Flow', () => {
   const createPresentation = () => {
     login();
     cy.visit('/dashboard');
-    cy.get('aside button').contains('+').click();
+    cy.get('aside:visible button').contains('+').click();
     cy.get('input[placeholder="Enter presentation name"]').type('Revision Test Deck');
     cy.contains('button', 'Create').click();
     cy.contains('Revision Test Deck').should('be.visible');
@@ -56,7 +56,7 @@ describe('Revision History Flow', () => {
 
     cy.clock(Date.now(), ['Date']);
 
-    cy.get('aside button').contains('T').click();
+    cy.get('aside:visible button').contains('T').click();
     cy.contains('New Text').should('be.visible');
     cy.get('textarea[placeholder="Your text goes here"]').type('First edit');
     cy.contains('button', 'create').click();
@@ -64,7 +64,7 @@ describe('Revision History Flow', () => {
 
     cy.tick(61000);
 
-    cy.get('aside button').contains('+').click();
+    cy.get('aside:visible button').contains('+').click();
     cy.wait(1000);
 
     cy.contains('button', 'History').click();
@@ -81,7 +81,7 @@ describe('Revision History Flow', () => {
 
     cy.clock(Date.now(), ['Date']);
 
-    cy.get('aside button').contains('T').click();
+    cy.get('aside:visible button').contains('T').click();
     cy.contains('New Text').should('be.visible');
     cy.get('textarea[placeholder="Your text goes here"]').type('Version A');
     cy.contains('button', 'create').click();
@@ -91,7 +91,7 @@ describe('Revision History Flow', () => {
     cy.tick(61000);
 
     // Add another slide to create a newer revision (2 slides)
-    cy.get('aside button').contains('+').click();
+    cy.get('aside:visible button').contains('+').click();
     cy.wait(1000);
 
     // Open revision history and restore the older version (1 slide)
@@ -112,7 +112,7 @@ describe('Revision History Flow', () => {
     cy.clock(Date.now(), ['Date']);
 
     // Add a text element to trigger a new revision capture
-    cy.get('aside button').contains('T').click();
+    cy.get('aside:visible button').contains('T').click();
     cy.contains('New Text').should('be.visible');
     cy.get('textarea[placeholder="Your text goes here"]').type('Post-restore edit');
     cy.contains('button', 'create').click();
@@ -122,7 +122,7 @@ describe('Revision History Flow', () => {
     cy.tick(61000);
 
     // Add another slide to trigger capture
-    cy.get('aside button').contains('+').click();
+    cy.get('aside:visible button').contains('+').click();
     cy.wait(1000);
 
     // Open history and verify new revision entries exist

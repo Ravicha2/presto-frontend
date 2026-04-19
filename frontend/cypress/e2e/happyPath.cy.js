@@ -47,7 +47,7 @@ describe('Happy Path', () => {
   
   it('Create a new presentation successfully', () => {
     getToDashboard();
-    cy.get('aside button').contains('+').click();
+    cy.get('aside:visible button').contains('+').click();
     cy.get('input[placeholder="Enter presentation name"]').type('My Test Presentation');
     cy.get('textarea[placeholder="Enter description"]').type('My Test Description');
     cy.contains('button', 'Create').click();
@@ -82,9 +82,9 @@ describe('Happy Path', () => {
     getToDashboard();
     cy.contains('Updated Presentation').click();
 
-    cy.get('aside button').contains('+').click();
+    cy.get('aside:visible button').contains('+').click();
     cy.wait(1000);
-    cy.get('aside button').contains('+').click();
+    cy.get('aside:visible button').contains('+').click();
     cy.wait(1000);
 
     cy.get('button').contains('←').should('be.visible');
